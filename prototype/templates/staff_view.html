@@ -1,0 +1,659 @@
+{% extends "base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load mathfilters %}
+
+{% block title %}
+<title>StaffView</title>
+{% endblock %}
+
+{% block content %}
+<section id="tabs" class="project-tab">
+  <div class="card m-3">
+  <div class="card-body">
+    <div class="row ">
+      <div class="col-12">
+        <nav>
+          <div class="nav nav-tabs nav-fill bg-primary" id="nav-tab" role="tablist">
+            <a class="nav-item nav-link active text-dark" id="nav-users-tab" data-toggle="tab" href="#nav-users"
+              role="tab" aria-controls="nav-home" aria-selected="true">Users</a>
+            <a class="nav-item nav-link text-dark" id="nav-news-tab" data-toggle="tab" href="#nav-news" role="tab"
+              aria-controls="nav-news" aria-selected="false">News</a>
+            <a class="nav-item nav-link text-dark" id="nav-appointment-tab" data-toggle="tab" href="#nav-appointment"
+              role="tab" aria-controls="nav-appointment" aria-selected="false">Appointments</a>
+            <a class="nav-item nav-link text-dark" id="nav-career-tab" data-toggle="tab" href="#nav-career" role="tab"
+              aria-controls="nav-career" aria-selected="false">Career</a>
+            <a class="nav-item nav-link text-dark" id="nav-contact-tab" data-toggle="tab" href="#nav-contact" role="tab"
+              aria-controls="nav-contact" aria-selected="false">Incubation</a>
+            <a class="nav-item nav-link text-dark" id="nav-gallery-tab" data-toggle="tab" href="#nav-gallery" role="tab"
+              aria-controls="nav-gallery" aria-selected="false">Gallery</a>
+            <a class="nav-item nav-link text-dark" id="nav-events-tab" data-toggle="tab" href="#nav-events" role="tab"
+              aria-controls="nav-events" aria-selected="false">Events</a>
+            <a class="nav-item nav-link text-dark" id="nav-team-tab" data-toggle="tab" href="#nav-team" role="tab"
+              aria-controls="nav-team" aria-selected="false">Team</a>
+            <a class="nav-item nav-link text-dark" id="others-tab" data-toggle="tab" href="#others" role="tab"
+              aria-controls="others-tab" aria-selected="false">Others</a>
+          </div>
+        </nav>
+        <div class="tab-content" id="nav-tabContent">
+
+          <!-- start users -->
+          <div class="tab-pane fade show active" id="nav-users" role="tabpanel" aria-labelledby="nav-users-tab">
+            <nav>
+              <div class="nav nav-tabs nav-fill" id="all-users-nav-tab" role="tablist">
+                <a class="nav-item nav-link active text-dark" id="startups-tab" data-toggle="tab" href="#startups"
+                  role="tab" aria-controls="startups" aria-selected="true">Startups</a>
+                  <a class="nav-item nav-link text-dark" id="mentors-tab" data-toggle="tab" href="#mentors"
+                  role="tab" aria-controls="mentors" aria-selected="true">Mentors</a>
+                <a class="nav-item nav-link text-dark" id="reports-tab" data-toggle="tab" href="#all-reports" role="tab"
+                  aria-controls="all-reports" aria-selected="false">Report</a>
+              </div>
+            </nav>
+            <div class="tab-content" id="users-tabContent">
+              <div class="tab-pane fade show active" id="startups" role="tabpanel" aria-labelledby="startups-tab">
+                <table class="table table-bordered text-dark col-12">
+                  <thead class="thead-dark">
+                    <tr class="text-center">
+                      <th>User ID</th>
+                      <th>Company</th>
+                      <th>Founder</th>                     
+                      <th>Status</th>
+                      <th></th>                  
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for member in data %}
+                    {% for p in p_data %}
+                    {% if p.user_id == member.id and member.type == "Startup" %}
+                    <tr class="text-center bg-white">
+                      <td>{{member.id}}</td>
+                      <td style="text-decoration: underline;"><a href="/profile/{{member.id}}" title="view profile" class="text-dark">{{p.companyname}}</a></td>
+                      <td>{{member.first_name}} {{member.last_name}}</td>                     
+                      {% if member.approved == True %}
+                      <td class="text-success">Incubated </td>
+                      {% elif p.applied_for_incubation == True %}
+                      <td class="text-primary">Applied for Incubation</td>
+                      {% elif p.applied_for_incubation == False %}
+                      <td class="text-danger">Not Applied</td>
+                      {% endif %}
+                      <td>
+                        <form id="delete_form" enctype="multipart/form-data">
+                          {% csrf_token %}
+                          <input type="hidden" value="{{member.id}}" name="user_id">
+                          <button class="btn-primary" type="submit"
+                            onclick="submitData('#delete_form','/deleteUser/','removed user successfully')">Delete</button>
+                        </form>
+                      </td>
+                      <!-- <td>
+                        <form id="approve_form" enctype="multipart/form-data">
+                          {% csrf_token %}
+                          <input type="hidden" value="{{member.id}}" name="user_id">
+                          {% if member.approved == True %}
+                          <button class="btn-danger" type="submit"
+                            onclick="submitData('#approve_form','/approveUser/','disapproved user successfully')">Refuse
+                            as
+                            {{member.type}}</button>
+                          {% elif member.approved == False and member.type == "Startup" and p.applied_for_incubation == True %}
+                          <button class="btn-info" type="submit"
+                            onclick="submitData('#approve_form','/approveUser/','approved user successfully')">Approve
+                            as
+                            {{member.type}}</button>
+                          {% elif member.type == "Startup" and p.applied_for_incubation == False %}
+                          <p>Not applied for Incubation</p>
+                          {% else %}
+                          <p>no action needed</p>
+                          {% endif %}
+                          
+                        </form>
+                      </td> -->
+                    </tr>
+                    {% endif %}
+                    {% endfor %}
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+              <div class="tab-pane fade" id="mentors" role="tabpanel" aria-labelledby="mentors-tab">
+                mentors
+              </div>
+              <div class="tab-pane fade" id="all-reports" role="tabpanel" aria-labelledby="all-reports-tab">
+                <table class="table table-bordered text-dark col-md-2">
+                  <th>Total Startups</th>
+                  <th>Total Mentors</th>
+                  <th>Approved Startups</th>
+                  <th>Approved Mentors</th>
+                  <tr class="text-center">
+                    <td>{{total_startups}}</td>
+                    <td>{{total_mentors}}</td>
+                    <td>{{approved_startups}}</td>
+                    <td>{{approved_mentors}}</td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+          </div>
+          <!-- end users -->
+          <!-- start news -->
+          <div class="tab-pane fade" id="nav-news" role="tabpanel" aria-labelledby="nav-news-tab">
+            <nav>
+              <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+                <a class="nav-item nav-link active text-dark" id="all-news-tab" data-toggle="tab" href="#all-news"
+                  role="tab" aria-controls="all-news" aria-selected="true">All News</a>
+                <a class="nav-item nav-link text-dark" id="add-news-tab" data-toggle="tab" href="#add-news" role="tab"
+                  aria-controls="add-news" aria-selected="false">Add News</a>
+              </div>
+            </nav>
+            <div class="tab-content" id="news-tabContent">
+              <div class="tab-pane fade show active" id="all-news" role="tabpanel" aria-labelledby="all-news-tab">
+                <table class="table table-bordered">
+                  <thead class="thead-dark">
+                    <tr class="text-center">
+                      <th>News ID</th>
+                      <th>Title</th>
+                      <th>Date</th>
+                      <th>Content</th>
+                      <th>PDF</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for data in newsData %}
+                    <tr class="text-center">
+                      <td>{{data.id}}</td>
+                      <td>{{data.title}}</td>
+                      <td>{{data.date}}</td>
+                      <td>{{data.content}}</td>
+                      <td>{{data.pdf}}</td>
+                      <td>
+                        <form id="form_{{data.id}}" enctype="multipart/form-data">
+                          <input type="hidden" value="{{data.id}}" name="news_id">
+                          <button class="btn-info" type="submit">modify</button>
+                          <button class="btn-danger" type="submit">delete</button>
+                        </form>
+                      </td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+              <div class="tab-pane fade border border-primary p-2" id="add-news" role="tabpanel"
+                aria-labelledby="add-news-tab">
+                <center>
+                  <h5>Add News Form</h5>
+                </center>
+                <form id="addNewsForm" enctype="multipart/form-data">
+                  {% csrf_token %}
+                  <div class="row text-dark justify-content-center">
+                    <div class="col-md-8">{{ newsForm.title|as_crispy_field }}</div>
+                  </div>
+                  <div class="row text-dark justify-content-center">
+                    <div class="col-md-8">{{ newsForm.content|as_crispy_field }}</div>
+                  </div>
+                  <div class="row text-dark justify-content-center">
+                    <div class="col-md-8" oninput="validateFile('news_pdf');">{{ newsForm.pdf|as_crispy_field }}</div>
+                  </div>
+                  <div class="row text-dark justify-content-center">
+                    <center>
+                      <div class="col-md-8">
+                        <button type="submit" class="btn border border-info btn-info"
+                          onclick="addData('#addNewsForm','/addNews/','new data added')">Add</button>
+                      </div>
+                    </center>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+          <!-- end news -->
+          <!-- start appointment -->
+          <div class="tab-pane fade" id="nav-appointment" role="tabpanel" aria-labelledby="nav-appointment-tab">
+            <table class="table table-bordered">
+              <thead class="thead-dark">
+                <tr class="text-center">
+                  <th>Id</th>
+                  <th>Date and time</th>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Phone</th>
+                  <th>Purpose</th>
+                  <th>Status</th>
+                  <th>Action</th>
+
+                </tr>
+              </thead>
+              <tbody class="text-dark text-center">
+                {% for row in appointment %}
+                <tr>
+                  <td>{{row.id}}</td>
+                  <td>{{row.date}} {{row.time}}</td>
+                  <td>{{row.name}}</td>
+                  <td>{{row.email}}</td>
+                  <td>{{row.mobile}}</td>
+                  <td>{{row.purpose}}</td>
+                  {% if row.fixed == True %}
+                  <td class="text-succes">Fixed</td>
+                  {% else %}
+                  <td class="text-danger">Not Fixed</td>
+                  {% endif %}
+                  <td><button onclick="viewRow('#row_{{row.id}}')">Accept</button></td>
+                </tr>
+                <tr>
+                  <div id="row_{{row.id}}" style="display: none;">
+                    <h2>{{row.name}}</h2>
+                  </div>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+          <!-- end appointment -->
+          <!-- start team -->
+          <div class="tab-pane fade" id="nav-team" role="tabpanel" aria-labelledby="nav-team-tab">
+            <nav>
+              <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+                <a class="nav-item nav-link active text-dark" id="all-members-tab" data-toggle="tab" href="#all-members"
+                  role="tab" aria-controls="all-members" aria-selected="true">Team Members</a>
+                <a class="nav-item nav-link text-dark" id="add-member-tab" data-toggle="tab" href="#add-member"
+                  role="tab" aria-controls="add-member" aria-selected="false">Add Team Member</a>
+              </div>
+            </nav>
+            <div class="tab-content" id="news-tabContent">
+              <div class="tab-pane fade show active" id="all-members" role="tabpanel" aria-labelledby="all-members-tab">
+                <table class="table">
+                  <thead class="thead-dark">
+                    <tr class="text-center">
+                      <th>Id</th>
+                      <th>Name</th>
+                      <th>Designation</th>
+                      <th>Phone</th>
+                      <th>Photo</th>
+                      <th>links</th>
+                      <th>Action</th>
+
+                    </tr>
+                  </thead>
+                  <tbody class="text-dark text-center">
+                    {% for member in team %}
+                    <tr>
+                      <td>{{member.id}}</td>
+                      <td>{{member.first_name}} {{member.last_name}}</td>
+                      <td>{{member.designation}}</td>
+                      <td>{{member.phone}}</td>
+                      <td>{{member.profile_pic}}</td>
+                      <td>{{member.fb_link}},{{member.twitter_link}},{{member.insta_link}},{{member.linkedin_link}}</td>
+                      <td><button class="btn-info"><a href="/member/{{member.id}}">View</a></button></td>
+                    </tr>
+                    {% endfor%}
+                  </tbody>
+                </table>
+              </div>
+              <div class="tab-pane fade" id="add-member" role="tabpanel" aria-labelledby="add-member-tab">
+                <form id="addMember" enctype="multipart/form-data">
+                  {% csrf_token %}
+                  <div class="row text-dark justify-content-center">
+                    <div class="col-md-6">{{ member_form.first_name|as_crispy_field }}</div>
+                    <div class="col-md-6">{{ member_form.last_name|as_crispy_field }}</div>
+                  </div>
+                  <div class="row text-dark justify-content-center">
+                    <div class="col-md-6">{{ member_form.designation|as_crispy_field }}</div>
+                    <div class="col-md-6">{{ member_form.phone|as_crispy_field }}</div>
+                  </div>
+                  <div class="row text-dark justify-content-center">
+                    <div class="col-md-6" oninput="validateImage('member_pic')">{{member_form.profile_pic|as_crispy_field }}</div>
+                    <div class="col-md-6">{{ member_form.fb_link|as_crispy_field }}</div>
+                  </div>
+                  <div class="row text-dark justify-content-center">
+                    <div class="col-md-4">{{ member_form.twitter_link|as_crispy_field }}</div>
+                    <div class="col-md-4">{{ member_form.insta_link|as_crispy_field }}</div>
+                    <div class="col-md-4">{{ member_form.linkedin_link|as_crispy_field }}</div>
+                  </div>
+                  <div class="row text-dark justify-content-center">
+                    <div class="col text-center"><button type="submit" class="btn btn-info"
+                        onclick="submitData('#addMember','/addTeamMember/','new team member added')">Add to team
+                        AIC</button></div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+          <!-- end team -->
+          <!-- gallery -->
+          <div class="tab-pane fade " id="nav-gallery" role="tabpanel" aria-labelledby="nav-gallery-tab">
+            <nav>
+              <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+                <a class="nav-item nav-link active text-dark" id="all-images-gallery-tab" data-toggle="tab"
+                  href="#all-images-gallery" role="tab" aria-controls="all-images-gallery"
+                  aria-selected="true">Gallery</a>
+                <a class="nav-item nav-link text-dark" id="add-gallery-image-tab" data-toggle="tab"
+                  href="#add-gallery-image" role="tab" aria-controls="add-gallery-image" aria-selected="false">Add
+                  Image</a>
+              </div>
+            </nav>
+            <div class="tab-content" id="news-tabContent">
+              <div class="tab-pane fade show active" id="all-images-gallery" role="tabpanel"
+                aria-labelledby="all-images-gallery-tab">
+                <table class="table">
+                  <thead class="thead-dark">
+                    <tr class="text-center">
+                      <th>Id</th>
+                      <th>Image</th>
+                      <th>Description</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody class="text-dark text-center">
+                    {% for photo in gallery_data %}
+                    <tr>
+                      <td>{{photo.id}}</td>
+                      <td>{{photo.path}}</td>
+                      <td>{{photo.description}}</td>
+                      <td><button>Delete</button></td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+
+              </div>
+
+              <div class="tab-pane fade" id="add-gallery-image" role="tabpanel" aria-labelledby="add-gallery-image-tab">
+                <div class="row justify-content-center">
+                  <h4>Add to Gallery</h4>
+                </div>
+                <form id="gallery_form" enctype="multipart/form-data">
+                  {% csrf_token %}
+                  <div class="row justify-content-center">
+                    <div class="col-md-6">
+                      {{gallery_form.path|as_crispy_field}}
+                    </div>
+                  </div>
+                  <div class="row justify-content-center">
+                    <div class="col-md-6">
+                      {{gallery_form.description|as_crispy_field}}
+                    </div>
+                  </div>
+                  <div class="row justify-content-center">
+                    <div class="col-md-2">
+                      <button class="btn btn-primary" type="submit"
+                        onclick="submitData('#gallery_form','/addGallery/','uploaded')">Add to Gallery</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+          <!-- end gallery -->
+          <!-- career -->
+          <div class="tab-pane fade" id="nav-career" role="tabpanel" aria-labelledby="nav-career-tab">
+            <nav>
+              <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+                <a class="nav-item nav-link active text-dark" id="all-careers-tab" data-toggle="tab" href="#all-careers"
+                  role="tab" aria-controls="all-careers" aria-selected="true">Careers</a>
+                <a class="nav-item nav-link text-dark" id="add-job-tab" data-toggle="tab" href="#add-job" role="tab"
+                  aria-controls="add-job" aria-selected="false">Add Job</a>
+                  <a class="nav-item nav-link text-dark" id="view-applications-tab" data-toggle="tab" href="#view-applications" role="tab"
+                  aria-controls="view-applications" aria-selected="false">View Applications</a>
+              </div>
+            </nav>
+            <div class="tab-content" id="career-tabContent">
+              <div class="tab-pane fade show active" id="all-careers" role="tabpanel" aria-labelledby="all-careers-tab">
+                <table class="table mt-0 table-bordered">
+                  <thead class="thead-dark">
+                    <tr class="text-center">
+                      <th>Job ID</th>
+                      <th>Title</th>
+                      <th>Date</th>
+                      <th>Job Description</th>
+                      <th>PDF</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody class="text-dark">
+                    {% for job in jobs %}
+                    <tr class="text-center">
+                      <td>{{job.id}}</td>
+                      <td>{{job.job_title}}</td>
+                      <td>{{job.date}}</td>
+                      <td>{{job.job_description}}</td>
+                      <td>{{job.job_pdf}}</td>
+                      <td class="d-flex p-2">                      
+                          <a href="/viewJob/{{job.id}}"><button class="btn-info ml-1">modify</button></a>
+                          <form id="deleteJobform">
+                            {% csrf_token %}
+                            <button class="btn-danger ml-1" type="submit" onclick="submitData('#deleteJobform','/deleteJob/{{job.id}}/','job removed successfully')">delete</button>
+                          </form>
+                          <a href=""></a>
+                      </td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+              <div class="tab-pane fade border p-2" id="add-job" role="tabpanel"
+                aria-labelledby="add-job-tab">
+                <center>
+                  <h5>Add Jobs</h5>
+                </center>
+                <form id="addJobForm" enctype="multipart/form-data">
+                  {% csrf_token %}
+                  <div class="row text-dark justify-content-center">
+                    <div class="col-md-8">{{ add_job.job_title|as_crispy_field }}</div>
+                  </div>
+                  <div class="row text-dark justify-content-center">
+                    <div class="col-md-8">{{ add_job.job_description|as_crispy_field }}</div>
+                  </div>
+                  <div class="row text-dark justify-content-center">
+                    <div class="col-md-8">{{ add_job.job_qualification|as_crispy_field }}</div>
+                  </div>
+                  <div class="row text-dark justify-content-center">
+                    <div class="col-md-8" oninput="validateFile('job_pdf');">{{ add_job.job_pdf|as_crispy_field }}</div>
+                  </div>
+                  <div class="row text-dark justify-content-center">
+                    <center>
+                      <div class="col-md-8">
+                        <button type="submit" class="btn border border-info btn-info"
+                          onclick="addData('#addJobForm','/addjob/','New job added')">Add</button>
+                      </div>
+                    </center>
+                  </div>
+                </form>
+              </div>
+              <div class="tab-pane fade p-2" id="view-applications" role="tabpanel" aria-labelledby="view-applications-tab">
+    
+              <table class="table table-bordered">
+                <thead class="bg-dark text-white text-center">
+                  <th>Job Id</th>
+                  <th>Position</th>
+                  <th>Number of applicants</th>
+                  <th>Date of job posted</th>
+                  <th></th>
+                </thead>
+                <tbody class="text-center text-dark">
+                  {% for job in jobs %}
+                  <tr>
+                    <td>{{job.id}}</td>
+                    <td>{{job.job_title}}</td>
+                    <td>{{job.num_applications}}</td>
+                    <td>{{job.date}}</td>
+                    <td><a href="/ViewJobApplications/{{job.id}}"><button class="btn-info">View</button></a></td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+              </div>
+            </div>
+          </div>
+          <!-- end career -->
+          <!-- start others -->
+          <div class="tab-pane fade" id="others" role="tabpanel" aria-labelledby="others-tab">
+            <nav>
+              <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+                <a class="nav-item nav-link active text-dark" id="queries-tab" data-toggle="tab" href="#queries"
+                  role="tab" aria-controls="queries" aria-selected="true">Queries</a>
+                <a class="nav-item nav-link text-dark" id="notification-tab" data-toggle="tab" href="#notification" role="tab"
+                  aria-controls="notification" aria-selected="false">Notification</a>
+              </div>
+            </nav>
+            <div class="tab-content" id="others-tabContent">
+              <div class="tab-pane fade show active" id="queries" role="tabpanel" aria-labelledby="queries-tab">
+                <table class="table table-bordered">
+                  <thead class="thead-dark">
+                    <tr class="text-center">
+                      <th>ID</th>
+                      <th>Name</th>
+                      <th>Email</th>
+                      <th>Subject</th>
+                      <th>Query</th>
+                      <th>Date</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for query in queries %}
+                    <tr>
+                    <td>{{query.id}}</td>
+                    <td>{{query.name}}</td>
+                    <td>{{query.email}}</td>
+                    <td>{{query.subject}}</td>
+                    <td>{{query.content}}</td>
+                    <td>{{query.date}}</td>
+                    <td><button>Reply</button></td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+              <div class="tab-pane fade" id="notification" role="tabpanel" aria-labelledby="notification-tab">
+                <h1>notifications</h1>
+              </div>
+            </div>
+          </div>
+          <!-- end others -->
+          <!-- start events -->
+          <div class="tab-pane fade" id="nav-events" role="tabpanel" aria-labelledby="nav-events-tab">
+            <nav>
+              <div class="nav nav-tabs nav-fill" id="event-nav-tab" role="tablist">
+                <a class="nav-item nav-link active text-dark" id="add-event-tab" data-toggle="tab" href="#add-event"
+                  role="tab" aria-controls="add-event" aria-selected="true">Add Event</a>
+                <a class="nav-item nav-link text-dark" id="current-event-tab" data-toggle="tab" href="#current-event" role="tab"
+                  aria-controls="current-event" aria-selected="false">Current Events</a>
+                  <a class="nav-item nav-link text-dark" id="upcoming-event-tab" data-toggle="tab" href="#upcoming-event" role="tab"
+                  aria-controls="upcoming-event" aria-selected="false">Upcoming Events</a>
+              </div>
+            </nav>
+            <div class="tab-content" id="events-tabContent">
+              <div class="tab-pane fade show active" id="add-event" role="tabpanel" aria-labelledby="add-event-tab">
+                <form id="event_form" enctype="multipart/form-data">
+                  {% csrf_token %}
+                <div class="row d-flex justify-content-center">
+                  <div class="col-md-12">
+                    {{events_form.event_title | as_crispy_field}}
+                  </div>                  
+                </div>
+                <div class="row d-flex justify-content-center">
+                  <div class="col-md-6">
+                    {{events_form.organizers | as_crispy_field}}
+                  </div>
+                  <div class="col-md-6">
+                    {{events_form.event_content | as_crispy_field}}
+                  </div>                  
+                </div>
+                <div class="row d-flex justify-content-center">
+                  <div class="col-md-6">
+                    {{events_form.start_date| as_crispy_field}}
+                  </div>
+                  <div class="col-md-6">
+                    {{events_form.end_date | as_crispy_field}}
+                  </div>                  
+                </div>
+                <div class="row d-flex justify-content-center">
+                  <div class="col-md-6">
+                    {{events_form.start_time | as_crispy_field}}
+                  </div>
+                  <div class="col-md-6">
+                    {{events_form.end_time | as_crispy_field}}
+                  </div>                  
+                </div>
+                <div class="row d-flex justify-content-center" oninput="validateFile('event_pdf')">
+                  <div class="col-md-12">
+                    {{events_form.more_info | as_crispy_field}}
+                  </div>                  
+                </div>
+                <div class="row d-flex justify-content-center">                  
+                    <button class="btn btn-secondary" type="submit" onclick="submitData('#event_form','/addEvents/','Event added!')">Add Event </button>                                
+                </div>
+                </form>
+              </div>
+              <div class="tab-pane fade" id="current-event" role="tabpanel" aria-labelledby="current-event-tab">
+                <table class="table table-bordered text-center text-dark">
+                  <thead class="thead-dark">
+                    <th>Id</th>
+                    <th>Title</th>
+                    <th>Start Date</th>
+                    <th>End date</th>
+                    <th>Status</th>
+                  </thead>
+                  <tbody>
+                    {% for event in events %}
+                    <tr>
+                      <td><a href="#">{{event.id}}</a></td>
+                      <td>{{event.event_title}}</td>                      
+                      <td>{{event.start_date}}</td>
+                      <td>{{event.end_date}}</td>
+                      {% if event.start_date <= today and event.end_date >= today %}
+                        <td class="text-info">Ongoing</td>
+                      {% elif event.start_date > today %}
+                        <td class="text-primary">Upcoming</td>
+                      {% elif event.start_date < today and event.end_date < today %}
+                        <td class="text-success">Completed</td>
+                      {% endif %}                     
+                    </tr>
+                    {% endfor%}
+                  </tbody>
+                
+                </table>
+                
+              </div>
+              <div class="tab-pane fade" id="upcoming-event" role="tabpanel" aria-labelledby="upcoming-event-tab">
+                <table class="table table-bordered text-center text-dark">
+                  <thead class="thead-dark">
+                    <th>Id</th>
+                    <th>Title</th>
+                    <th>Start Date</th>
+                    <th>End date</th>
+                    <th>Status</th>
+                  </thead>
+                  <tbody>
+                    {% for event in events %}
+                      {% if event.start_date > today %}
+                        <tr>
+                          <td><a href="#">{{event.id}}</a></td>
+                          <td>{{event.event_title}}</td>                      
+                          <td>{{event.start_date}}</td>
+                          <td>{{event.end_date}}</td>                         
+                          <td class="text-primary">Upcoming: {{ event.start_date|sub:today }} left</td>
+                        </tr>
+                      {% endif %}    
+                    {% endfor%}
+                  </tbody>
+                
+                </table>
+              </div>
+            </div>
+          </div>
+          <!-- end events -->
+        </div>
+      </div>
+    </div>
+    </div>
+</section>
+<script>
+  $(document).on("click", ".open-modifyJob", function () {
+    var myBookId = $(this).data('id');
+    $(".modal-body #bookId").val( myBookId );
+    // As pointed out in comments, 
+    // it is unnecessary to have to manually call the modal.
+    // $('#addBookDialog').modal('show');
+});
+
+</script>
+{% endblock %}

@@ -1,0 +1,418 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block content %}
+<style>
+    .progress {
+        margin-bottom: 10px;
+        height: 10px;
+        font-size: 12px;
+
+    }
+
+    .progress-bar {
+        width: 0;
+
+    }
+
+    .panel-default>.panel-heading {
+        color: #333;
+        background-color: #fcfcfc;
+        border-color: #ddd;
+        border-color: rgba(221, 221, 221, 0.85);
+    }
+</style>
+<div class="container-fluid m-0 card">
+    <div class="row text-dark justify-content-center m-3">
+        <div class="col-md-12 text-center p-2 mt-3">
+            {% if company_info.company_logo %}
+            <a class="text-dark " href="#"><img src="{{MEDIA_URL}}{{company_info.company_logo.url}}" alt=""
+                    class="img-fluid rounded-circle" height="50" width="50">
+                <h3>{{company_info.companyname}}</h3>
+            </a>
+            {% else %}
+            <span>
+                <h3>{{company_info.companyname}}</h3>
+            </span>
+            {% endif %}
+        </div>
+        <div class="col-md-8 ">
+            <div class="row d-flex">
+                <div class="col-md-12 d-flex text-center">
+                    <nav>
+                        <div class="nav nav-pills nav-fill" id="nav-tab" role="tablist">
+                            <a class="nav-item nav-link active text-dark" id="nav-company-info-tab" data-toggle="tab"
+                                href="#nav-company-info" role="tab" aria-controls="nav-company-info"
+                                aria-selected="true">Company
+                                Info</a>
+                            <a class="nav-item nav-link  text-dark" id="nav-founder-info-tab" data-toggle="tab"
+                                href="#nav-founder-info" role="tab" aria-controls="nav-founder-info"
+                                aria-selected="true">Founder
+                                Info</a>
+                            <a class="nav-item nav-link text-dark" id="nav-notifications-tab" data-toggle="tab"
+                                href="#nav-notifications" role="tab" aria-controls="nav-notifications"
+                                aria-selected="false">Notifications</a>
+                            <a class="nav-item nav-link text-dark" id="nav-others-tab" data-toggle="tab" href="#nav-others"
+                                role="tab" aria-controls="nav-others" aria-selected="false">Others</a>
+                        </div>
+                    </nav>
+                    <ul class="navbar-nav ml-auto nav-flex-icons">
+                        <li class="nav-item avatar dropdown">
+                            <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink-5" data-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false">
+                                <span class="badge badge-danger ml-2" id="not_count">{{not_count}}</span>
+                                <i class="fas fa-bell fa-lg"></i>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-lg-right rounded"
+                                aria-labelledby="navbarDropdownMenuLink-5">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h5 class="panel-title text-center">Notifications</h5>
+                                    </div>
+                                    <div class="panel-body" style="font-size: 14px;">
+                                        {% for message in notifications %}
+                                        {% if message.user == user.id %}
+                                        <div class="alert alert-white" style="width: 300px;" id="div_{{message.id}}">
+                                            <strong class="default"><i class="fa fa-road"></i>{{message.title}}
+                                                {{message.id}}</strong> {{message.content}}
+                                            <form id="form_{{message.id}}" enctype="multipart/form-data">
+                                                {% csrf_token %}
+                                                <input type="hidden" value="{{message.id}}" name="notification_id">
+                                                <button class="close" aria-hidden="true"
+                                                    onclick="update('#form_{{message.id}}','/remove_notification/','div_{{message.id}}')"
+                                                    type="submit">x</button>
+                                            </form>
+                                            <hr>
+                                        </div>
+                                        
+                                        {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <hr>
+            <div class="container tab-content p-0" id="nav-tabContent">
+                <div class="tab-pane fade show active mt-0" id="nav-company-info" role="tabpanel"
+                    aria-labelledby="nav-company-info-tab">
+                    <!-- heading start -->
+                    <div class="row" style="margin-top: -70px;">
+                        <div class="col-md-6">
+                            <h6 class="text-left ml-3 text-dark mt-3">Company Information</h6>                                
+                        </div>
+                        <div class="col-md-6 d-flex">
+                            <div class="container p-1 text-dark text-center" style="font-size: 12px;">
+                                Personal information {{personal}}% completed
+                                <div class="progress">
+                                    <div class="progress-bar bg-success text-dark" role="progressbar"
+                                        aria-valuenow="{{personal}}" aria-valuemin="0" aria-valuemax="100">
+                                        {{personal}}</div>
+                                </div>
+                            </div>
+                            <div class="container p-1 text-dark text-center" style="font-size: 12px;">
+                                Company information {{comapny_percentage}}% completed
+                                <div class="progress">
+                                    <div class="progress-bar bg-info text-dark" role="progressbar"
+                                        aria-valuenow="{{comapny_percentage}}" aria-valuemin="0"
+                                        aria-valuemax="100">{{comapny_percentage}}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row p-1">
+                        {% if user.approved == True and company_info.applied_for_incubation == True %}
+                        <div class="col-md-12 d-flex justify-content-end">
+                            <p class="text-success">Approved as {{user.type}}</p>
+                            <a href="/startupprofile/"><button class="btn-info border border-none ml-1">Edit Profile</button></a>
+                        </div>
+                        {% elif company_info.applied_for_incubation == False %}
+                        <div class="col-md-12 d-flex justify-content-end">                            
+                            <a href="/startupprofile/"><button class="btn-info border border-none">Edit Profile</button></a>
+                            {% if comapny_percentage >= 55 and personal >= 90 %}
+                            <form id="apply_incubation" method="post" action="/apply_incubation/" >
+                                {% csrf_token %}
+                                <button class="btn-success border border-none" onclick="updateDataBase()" type="submit">apply now</button>
+                            </form>
+                            {% endif %}
+                        </div>                       
+                        {% elif company_info.applied_for_incubation == True and user.approved == False %}
+                        <div class="col-md-12 text-right">
+                            <p class="text-info">Your application for incubation is on process</p>
+                        </div>                   
+                        
+                        {% endif %}
+                    </div>
+                    <!-- heading end -->
+                    <div class="row">
+                        <div class="col-md-12">
+                            <table class="table table-bordered text-center">
+                                <thead>
+                                    <th>field1</th>
+                                    <th>field2</th>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Company Name</td>
+                                        <td>{{company_info.companyname}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Year of Registration</td>
+                                        <td>{{company_info.registration_year}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Type of Incubation</td>
+                                        <td>{{company_info.type_of_incubation}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Date of Incubation</td>
+                                        <td>{{company_info.date_of_incubation}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Company Address</td>
+                                        <td>{{company_info.company_address}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>CIN Number</td>
+                                        <td>{{company_info.cin_number}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>DIPP Number</td>
+                                        <td>{{company_info.dipp_number}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Company Stage</td>
+                                        <td>{{company_info.stage}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Number of Directors</td>
+                                        <td>{{company_info.num_directors}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Number of Women Directors</td>
+                                        <td>{{company_info.num_women_dir}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Number of employees</td>
+                                        <td>{{company_info.employees}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Webpage</td>
+                                        <td>{{company_info.webpage}}</td>
+                                    </tr>
+                                    {% if company_info.intelectual_property == True %}
+                                    <tr>
+                                        <td>Intelectual Property</td>
+                                        <td>Yes</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Intelectual Property Type</td>
+                                        <td>{{company_info.i_property_type}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Number of Intelectual Properties</td>
+                                        <td>{{company_info.number_of_ip}}</td>
+                                    </tr>
+                                    {% else %}
+                                    <tr>
+                                        <td>Intelectual Property</td>
+                                        <td>No</td>
+                                    </tr>
+                                    {% endif %}
+                                    <tr>
+                                        <td>Company Stage</td>
+                                        <td>{{company_info.stage}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Nature of Firm</td>
+                                        <td>{{company_info.nature_of_firm}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Funding</td>
+                                        <td>{{company_info.funding}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Sector</td>
+                                        <td>{{company_info.sector}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Operational Model</td>
+                                        <td>{{company_info.operational_model}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Target Market</td>
+                                        <td>{{company_info.target_market}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>About Company and Product</td>
+                                        <td>{{company_info.about}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>MSME Registration</td>
+                                        <td>{{company_info.msme_registration}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Flagship Program</td>
+                                        <td>{{company_info.flagship_program}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="nav-founder-info" role="tabpanel" aria-labelledby="nav-founder-info-tab">
+                    <div class="row" style="margin-top: -70px;">
+                        <div class="col-md-6">
+                            <h6 class="text-left ml-3 text-dark mt-3">Founder Information</h6>                                
+                        </div>
+                        <div class="col-md-6 d-flex">
+                            <div class="container p-1 text-dark text-center" style="font-size: 12px;">
+                                Personal information {{personal}}% completed
+                                <div class="progress">
+                                    <div class="progress-bar bg-success" role="progressbar"
+                                        aria-valuenow="{{personal}}" aria-valuemin="0" aria-valuemax="100">
+                                        {{personal}}</div>
+                                </div>
+                            </div>
+                            <div class="container p-1 text-dark text-center" style="font-size: 12px;">
+                                Company information {{comapny_percentage}}% completed
+                                <div class="progress">
+                                    <div class="progress-bar bg-info" role="progressbar"
+                                        aria-valuenow="{{comapny_percentage}}" aria-valuemin="0"
+                                        aria-valuemax="100">{{comapny_percentage}}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row p-1">
+                        {% if company_info.applied_for_incubation == False %}
+                        <div class="col-md-12 d-flex justify-content-end">                            
+                            <a href="/startupprofile/"><button class="btn-info border border-none">Edit Profile</button></a>
+                            {% if comapny_percentage >= 85%}
+                            <form id="apply_incubation" method="post" action="/apply_incubation/" >
+                                {% csrf_token %}
+                                <button class="btn-success border border-none" onclick="return updateDataBase()" type="submit">apply now</button>
+                            </form>
+                            {% endif %}
+                        </div>                       
+                        {% elif company_info.applied_for_incubation == True %}
+                        <div class="col-md-12 text-right">
+                            <p class="text-info">Your application for incubation is on process</p>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 text-center">
+                            {% if user_info.profilepic %}
+                            <div class="col-md-12 text-center">
+                                <img class="rounded-circle m-2" src="{{MEDIA_URL}}{{user_info.profilepic.url}}"
+                                    width="60" height="60"><br>
+                            </div>
+                            {% endif %}
+                                    <table class="table table-bordered">
+                                        <tbody>
+                                            <tr>
+                                                <td>Full Name</td>
+                                                <td>{{user.first_name}} {{user.last_name}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Email</td>
+                                                <td>{{user.email}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Phone</td>
+                                                <td>{{user_info.contact_number}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Address</td>
+                                                <td>{{user_info.address}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Qualification</td>
+                                                <td>{{company_info.academic_qualification_founder}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Experience</td>
+                                                <td>{{company_info.experience_of_founder}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Specialization</td>
+                                                <td>{{company_info.field_of_study}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Core Competancy</td>
+                                                <td>{{company_info.core_competancy}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Expectation</td>
+                                                <td>{{company_info.expectation}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Other Info</td>
+                                                <td>{{user_info.address}}</td>
+                                            </tr>
+                                        </tbody>
+                                        </thead>
+                                    </table>
+                                
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="nav-notifications" style="min-height: 500px;" role="tabpanel"
+                    aria-labelledby="nav-notifications-tab">
+                    <div class="row">
+                        <div class="col-md-12 text-center">
+                            <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                                <div class="toast-header">
+                                    <svg class=" rounded mr-2" width="20" height="20" xmlns="http://www.w3.org/2000/svg"
+                                        preserveAspectRatio="xMidYMid slice" focusable="false" role="img">
+                                        <rect fill="#007aff" width="100%" height="100%" />
+                                    </svg>
+                                    <strong class="mr-auto">Bootstrap</strong>
+                                    <small class="text-muted">11 mins ago</small>
+                                    <button type="button" class="ml-2 mb-1 close" data-dismiss="toast"
+                                        aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="toast-body">
+                                    Hello, world! This is a toast message.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="nav-others" style="min-height: 500px;" role="tabpanel"
+                    aria-labelledby="nav-others-tab">
+                    other
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function update(formid, URL, div) {
+        $(document).on('submit', formid, function (e) {
+            e.preventDefault();
+            var form_data = new FormData($(this)[0]);
+            var count = parseInt(document.getElementById('not_count').innerText);
+            count = count - 1;
+            $.ajax({
+                type: 'POST',
+                url: URL,
+                processData: false,
+                contentType: false,
+                data: form_data,
+                success: function (response) {
+                    $(formid)[0].reset();
+                    $('#' + div).hide();
+                    document.getElementById('not_count').innerHTML = count;
+
+                }
+            });
+        });
+    }
+</script>
+{% endblock %}

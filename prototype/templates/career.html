@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+{% block title %}
+<title>careers</title>
+{% endblock %}
+{% block content%}
+<div class="card">
+{% if messages %}
+    <div class="row">
+        <div class="col-md-12 text-right">
+            <ul class="messages text-success m-5">
+                {% for message in messages %}
+                <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    {% endif %}
+<div class="container mt-3 mb-5">
+    <center>
+        <h3 class="m-3 text-primary">Career Opportunities @ AIC-IIIT Kottayam</h3>
+    </center>
+    {% for job in career %}
+    <div class="list-group mt-2 list-group-item list-group-item-action flex-column align-items-start">
+        <div class="d-flex w-100 justify-content-between">
+            <h5 class="mb-1">{{job.job_title}}</h5>
+            <span><p class="text-info">Posted on {{job.date}}</p></span>
+        </div>
+        <hr>
+        <div class="row p-2" style="overflow:hidden;word-wrap: break-word;">
+            <big>{{job.job_description}}</big>
+        </div>
+        <div class="row d-flex justify-content-end">
+            <a href="/viewJobPdf/{{job.id}}"><button class="btn btn-info mr-2" type="submit">Info</button></a>
+            <a href="/apply_job/{{job.id}}"><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#application"
+                    data-whatever="">Apply Now</button></a>
+        </div>
+
+    </div>
+    {% endfor %}
+</div>
+</div>
+{% endblock %}

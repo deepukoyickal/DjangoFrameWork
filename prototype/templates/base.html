@@ -1,0 +1,485 @@
+{% load static %}
+{% load crispy_forms_tags %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	{% block title %}
+	
+	{% endblock %}
+
+	<link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900&display=swap"
+		rel="stylesheet">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Audiowide|Sofia|Trirong">
+	<link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css"
+		integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+		integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+		crossorigin="anonymous"></script>
+
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+
+	<link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+	<link rel="stylesheet" href="{% static 'css/animate.css' %}">
+
+	<link rel="stylesheet" href="{% static 'css/owl.carousel.min.css' %}">
+	<link rel="stylesheet" href="{% static 'css/owl.theme.default.min.css' %}">
+	<link rel="stylesheet" href="{% static 'css/magnific-popup.css' %}">
+
+	<link rel="stylesheet" href="{% static 'css/flaticon.css' %}">
+	<script src="{% static 'fontawesomefree/js/all.min.js' %}"></script>
+	<style>
+		html {
+			scroll-behavior: smooth;
+		  }
+		#loader {
+			position: fixed;
+			top: 0;
+			right: 0;
+			bottom: 0;
+			left: 0;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			background: none;
+			opacity: 0;
+			visibility: hidden;
+			-webkit-transition: opacity .3s ease-out, visibility 0s linear .3s;
+			-o-transition: opacity .3s ease-out, visibility 0s linear .3s;
+			transition: opacity .3s ease-out, visibility 0s linear .3s;
+			z-index: 999;
+		}
+
+		#loader.show {
+			-webkit-transition: opacity .6s ease-out, visibility 0s linear 0s;
+			-o-transition: opacity .6s ease-out, visibility 0s linear 0s;
+			transition: opacity .6s ease-out, visibility 0s linear 0s;
+			visibility: visible;
+			opacity: 1;
+		}
+
+		#loader .loader {
+			position: relative;
+			width: 45px;
+			height: 45px;
+			border: 5px solid #dddddd;
+			border-top: 5px solid #0652f5;
+			border-radius: 50%;
+			-webkit-animation: spin 2s linear infinite;
+			animation: spin 2s linear infinite;
+		}
+
+		@keyframes spin {
+			0% {
+				transform: rotate(0deg);
+			}
+
+			100% {
+				transform: rotate(360deg);
+			}
+		}
+
+		.dropdown-item:hover {
+			background-color: #0652f5;
+			color: white;
+		}
+
+		#top_button {
+			display: none;
+			position: fixed;
+			bottom: 20px;
+			right: 30px;
+			z-index: 99;
+			font-size: 18px;
+			border: none;
+			outline: none;
+			background-color: rgb(240, 239, 241);
+			color: rgb(4, 8, 252);
+			cursor: pointer;
+			padding: 10px;
+			border-radius: 4px;
+		}
+
+		@import url('https://fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i&subset=devanagari,latin-ext');
+
+		#main_nav_item {
+			color: black;
+			border: none;
+			-webkit-box-shadow: none;
+			box-shadow: none;
+			border-radius: 0%;
+		}
+		.item_block {
+			background-color: white;
+			text-align: center;
+			border-radius: 20px;
+			color:black;
+			margin-bottom: 50px;
+		}
+	
+		.icon {
+			position: relative;
+			bottom: 11px
+		}
+		
+		.mt-100 {
+			margin-top: 100px
+		}
+		
+		.profile img {
+			width: 88px;
+			height: 88px;
+			border-radius: 50%
+		}
+		
+		.card {
+			border-radius: 15px;
+			height: auto;
+			margin-left: 30px;
+			margin-right: 30px;
+			box-shadow: 0 10px 20px rgba(0, 0, 0, .2)
+		}
+		
+		.card-body {
+			position: relative;
+			
+		}
+
+		
+
+	</style>
+</head>
+
+<body>
+	<button class="rounded-circle" style="width:50px;height:50px;" onclick="topFunction()" id="top_button" title="Go to top"><i class="fa fa-arrow-up" aria-hidden="true"></i></button>
+	<nav class="navbar fixed-top navbar-expand-lg navbar-light bg-white">
+		<a class="text-dark " href="/" style="font-family: Audiowide, sans-serif;"><img
+				src="{% static 'images/AIC_Logo.png' %}" alt="" class="img-fluid" height="50" width="50">AIC-IIIT
+			KOTTAYAM</a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main_navigation_bar"
+			aria-controls="main_navigation_bar" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="container">
+			<div class="collapse navbar-collapse text-dark" id="main_navigation_bar">
+				<ul class="navbar-nav ml-auto nav-flex-icons p-3 ">
+					<li class="nav-item mr-1 pl-3 main_nav_item ">
+						<a class="nav-link text-dark" href="/index/"> <i class="fa-solid fa-house-user"></i>Home</a>
+					</li>
+					<li class="nav-item dropdown mr-2 pl-3">
+						<a class="nav-link text-dark" href="#"><i class="fa-solid fa-circle-info"></i>About</a>
+						<div class="dropdown-menu dropdown-secondary" aria-labelledby="navbarDropdown">
+							<a class="dropdown-item" href="/aboutAIC/">Who are we?</a>
+							<a class="dropdown-item" href="/index/#OurTeam">Our Team</a>
+							<a class="dropdown-item" href="/boardmembers">Board of Governors</a>
+							<a class="dropdown-item" href="#">Our Mentors</a>
+							<a class="dropdown-item" href="/startups/">Our Startups</a>
+							<a class="dropdown-item" href="/gallery/">Gallery</a>
+						</div>
+					</li>
+					<li class="nav-item mr-2 pl-3">
+						<a class="nav-link text-dark" href="/index/#news"><i class="fa-solid fa-newspaper"></i>News</a>
+					</li>
+					<li class="nav-item mr-1 pl-3 main_nav_item ">
+						<a class="nav-link text-dark" href="/careers/"> <i class="fa fa-graduation-cap" aria-hidden="true"></i>Careers</a>
+					</li>
+					<li class="nav-item dropdown mr-2 pl-3">
+						<a class="nav-link text-dark" href="#"><i class="fa-solid fa-calendar"></i>Events</a>
+						<div class="dropdown-menu dropdown-secondary" aria-labelledby="navbarDropdown">
+							<a class="dropdown-item" href="#">SIA</a>
+							<a class="dropdown-item" href="#">Trainings</a>
+							<a class="dropdown-item" href="#">Current Events</a>
+							<a class="dropdown-item" href="#">Upcoming Events</a>
+						</div>
+					</li>
+					{% if user.is_authenticated %}
+					<li class="nav-item dropdown mr-2 pl-3">
+						<a class="nav-link text-dark" href="#"><i class="fa-brands fa-get-pocket"></i>Apply Now</a>
+						<div class="dropdown-menu dropdown-secondary" aria-labelledby="navbarDropdown">
+							<a class="dropdown-item" href="#">Partners</a>
+							<a class="dropdown-item" href="#">Nodal Centers</a>			
+						</div>
+					</li>
+					{% if user.type == 'Staff' %}
+					<li class="nav-item mr-2 pl-3">
+						<a class="nav-link text-dark" href="/staffView/"><i class="fa-solid fa-gear"></i>Manage Data</a>
+					</li>
+					{% endif %}
+					<li class="nav-item mr-2 pl-3">
+						<a class="nav-link text-dark" href="/logout"><i
+								class="fa-solid fa-arrow-right-from-bracket"></i>Logout</a>
+					</li>
+
+					{% else %}
+
+					<li class="nav-item mr-2 pl-3">
+						<a class="nav-link text-dark" href="/register"><i class="fa-solid fa-user-plus"></i>Register</a>
+					</li>
+
+					<li class="nav-item mr-2 pl-3">
+						<a class="nav-link text-dark" href="/login"><i class="fa-solid fa-user"></i>Login</a>
+					</li>
+					{% endif %}
+
+
+				</ul>
+				<ul class="navbar-nav ml-auto nav-flex-icons">
+					{% if user.is_authenticated and user.type != 'Staff' %}
+					<li class="nav-item avatar dropdown">
+						<a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink-55" data-toggle="dropdown"
+							aria-haspopup="true" aria-expanded="false">
+							{% if user.profile_pic == 'null' %}
+							<img alt="" class="rounded-circle mt-2" src="{% static 'images/profile.png' %}" width="40"
+								height="40" />
+							{% else %}
+							<img alt="" class=" rounded-circle mt-2" src="{{MEDIA_URL}}{{user.profile_pic.url}}"
+								width="50" height="50">
+							{% endif %}
+
+						</a>
+						
+						{% if user.type == 'Startup' %}
+						<div class="dropdown-menu dropdown-menu-lg-right dropdown-secondary"
+							aria-labelledby="navbarDropdownMenuLink-55">
+							<a class="text-dark" href="/startup_home"><button class="dropdown-item" type="button"><i
+										class="fa fa-user" aria-hidden="true"></i><span
+										class="hidden-xs hidden-sm"></span>
+									Profile</button></a>
+							<a class="text-dark" href=""><button class="dropdown-item" type="button"><i
+										class="fa fa-key" aria-hidden="true"></i><span
+										class="hidden-xs hidden-sm"></span> Change
+									Password</button></a>
+							<a class="text-dark" href="/logout/"><button class="dropdown-item" type="button"><i class="fa fa-sign-out"
+									aria-hidden="true"></i>
+								Logout</button></a>
+						</div>
+						{% elif user.type == 'Mentor' %}
+						<div class="dropdown-menu dropdown-menu-lg-right dropdown-secondary"
+							aria-labelledby="navbarDropdownMenuLink-55">
+							<a class="text-dark" href="/mentorprofile"><button class="dropdown-item" type="button">
+									<i class="fa fa-user" aria-hidden="true"></i><span
+										class="hidden-xs hidden-sm"></span>
+									Profile</button></a>
+							<a class="text-dark" href=""><button class="dropdown-item" type="button"><i
+										class="fa fa-key" aria-hidden="true"></i><span
+										class="hidden-xs hidden-sm"></span> Change
+									Password</button></a>
+							<a class="text-dark" href="/logout/"><button class="dropdown-item" type="button"><i class="fa fa-sign-out"
+									aria-hidden="true"></i>Logout</button></a>
+						</div>
+						{% endif %}
+					</li>
+					{% elif user.is_authenticated and user.type == 'Staff'%}		
+						
+					{% endif %}
+				</ul>
+
+			</div>
+		</div>
+
+	</nav>
+	<!--/.Navbar -->
+
+	<div class="contaner-fluid" style="padding-top: 90px; min-height:600px; ">
+		{% block content %}
+
+
+
+		{% endblock %}
+	</div>
+	<!-- START FOOTER -->
+	<footer class="footer" style="position:relative; bottom:0;">
+		<div class="container-fluid px-lg-5">
+			<div class="row">
+				<div class="col-md-9 py-5">
+					<div class="row">
+						<div class="col-md-4 mb-md-0 mb-4">
+							<h2 class="footer-heading">About us</h2>
+							<p>The incubation centre, AIC IIITKottayam Foundation, is a non-profit Sec.8 company. It is sanctioned under the Atal Innovation Mission scheme of Govt. of India.</p>
+								<ul class="social mb-0 list-inline mt-3">
+									<li class="list-inline-item" title="facebook"><a href="#" class="social-link"><i class="fa-brands fa-facebook-f"></i></a></li>
+									<li class="list-inline-item" title="twitter"><a href="#" class="social-link"><i class="fa-brands fa-twitter"></i></a></li>
+									<li class="list-inline-item" title="instagram"><a href="#" class="social-link"><i class="fa-brands fa-instagram"></i></a></li>
+									<li class="list-inline-item" title="linkedin"><a href="#" class="social-link"><i class="fa-brands fa-linkedin"></i></a></li>
+								  </ul>
+							<!-- <ul class="ftco-footer-social p-0">
+								<li class="ftco-animate"><a href="#" data-toggle="tooltip" data-placement="top"
+										title="Twitter"><span class="fa-brands fa-twitter"></span></a></li>
+								<li class="ftco-animate"><a href="#" data-toggle="tooltip" data-placement="top"
+										title="Facebook"><span class="fa-brands fa-facebook"></span></a></li>
+								<li class="ftco-animate"><a href="#" data-toggle="tooltip" data-placement="top"
+										title="Instagram"><span class="fa-brands fa-instagram"></span></a></li>
+							</ul> -->
+						</div>
+						<div class="col-md-8">
+							<div class="row justify-content-center">
+								<div class="col-md-12 col-lg-10">
+									<div class="row">
+										<div class="col-md-4 mb-md-0 mb-4">
+											<h2 class="footer-heading">Courses</h2>
+											<ul class="list-unstyled">
+												<li><a href="#" class="py-1 d-block">Painting</a></li>
+												<li><a href="#" class="py-1 d-block">Sketch</a></li>
+												<li><a href="#" class="py-1 d-block">Drawing</a></li>
+												<li><a href="#" class="py-1 d-block">Sculpture</a></li>
+											</ul>
+										</div>
+										<div class="col-md-4 mb-md-0 mb-4">
+											<h2 class="footer-heading">Topics</h2>
+											<ul class="list-unstyled">
+												<li><a href="#" class="py-1 d-block">Accreditation</a></li>
+												<li><a href="#" class="py-1 d-block">Disclosure</a></li>
+												<li><a href="#" class="py-1 d-block">Student Code</a></li>
+												<li><a href="#" class="py-1 d-block">Job Opportunities</a></li>
+											</ul>
+										</div>
+										<div class="col-md-4 mb-md-0 mb-4">
+											<h2 class="footer-heading">Resources</h2>
+											<ul class="list-unstyled">
+												<li><a href="#" class="py-1 d-block">Security</a></li>
+												<li><a href="#" class="py-1 d-block">Global</a></li>
+												<li><a href="#" class="py-1 d-block">Charts</a></li>
+												<li><a href="#" class="py-1 d-block">Privacy</a></li>
+											</ul>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row mt-md-5">
+						<div class="col-md-12">
+							<p class="copyright">
+								Copyright &copy;
+								<script>document.write(new Date().getFullYear());</script> All rights reserved <i
+									class="fa fa-heart" aria-hidden="true"></i> Team AIC-IIIT Kottayam</a>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-3 py-md-5 py-4 aside-stretch-right pl-lg-5">
+					<h2 class="footer-heading">Post your Queries & Reviews</h2>
+					<form class="form-consultation" id="queryForm">
+						{% csrf_token %}
+						{% if not user.is_authenticated %}
+						<div class="form-group">
+							<input type="text" class="form-control" placeholder="Name" name="name">
+							
+						</div>
+						<div class="form-group">
+							<input type="text" class="form-control" placeholder="Email" name="email">
+							
+						</div>
+						{% endif %}
+						<div class="form-group">
+							<input type="text" class="form-control" placeholder="Subject" name="subject">
+							
+						</div>
+						<div class="form-group">
+							
+							<textarea id="" cols="30" rows="3" class="form-control" placeholder="Message" name="content"></textarea>
+						</div>
+						<div class="form-group">
+							<button type="submit" class="form-control submit px-3" onclick="submitData('#queryForm','/queries&reviews/','Message Sent')">Send Message</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</footer>
+
+
+	<!-- loader -->
+	<div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px">
+			<circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee" />
+			<circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10"
+				stroke="#F96D00" />
+		</svg></div>
+
+		<script>
+			var mybutton = document.getElementById("top_button");
+			window.onscroll = function() {scrollFunction()};
+			function scrollFunction() {
+				
+				if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+				  mybutton.style.display = "block";
+				  
+				} else {
+				  mybutton.style.display = "none";
+				  
+				}
+			  }
+			  function topFunction() {
+				document.body.scrollTop = 0;
+				document.documentElement.scrollTop = 0;
+			  }
+		</script>
+
+	<script src="{% static 'js/jquery.min.js' %}"></script>
+	<script src="{% static 'js/jquery-migrate-3.0.1.min.js' %}"></script>
+	<script src="{% static 'js/popper.min.js' %}"></script>
+	<script src="{% static 'js/bootstrap.min.js' %}"></script>
+	<script src="{% static 'js/jquery.easing.1.3.js' %}"></script>
+	<script src="{% static 'js/jquery.waypoints.min.js' %}"></script>
+	<script src="{% static 'js/jquery.stellar.min.js' %}"></script>
+	<script src="{% static 'js/jquery.animateNumber.min.js' %}"></script>
+	<script src="{% static 'js/owl.carousel.min.js' %}"></script>
+	<script src="{% static 'js/jquery.magnific-popup.min.js' %}"></script>
+	<script src="{% static 'js/scrollax.min.js' %}"></script>
+	<script
+		src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
+	<script src="{% static 'js/google-map.js' %}"></script>
+	<script src="{% static 'js/main.js' %}"></script>
+	<script src="{% static 'js/accounts_functions.js' %}"></script>
+	<script src="{% static 'js/gallery.js' %}"></script>
+	<script>
+
+		$("#top_button").click(function() {
+			window.scrollTo({top: 0, behavior: 'smooth'});
+			return false;
+		  });
+
+		
+			//Animation
+
+			$(document).ready(function () {
+				$('body.hero-anime').removeClass('hero-anime');
+			});
+
+			//Menu On Hover
+
+			$('body').on('mouseenter mouseleave', '.nav-item', function (e) {
+				if ($(window).width() > 750) {
+					var _d = $(e.target).closest('.nav-item'); _d.addClass('show');
+					setTimeout(function () {
+						_d[_d.is(':hover') ? 'addClass' : 'removeClass']('show');
+					}, 1);
+				}
+			});
+
+			//Switch light/dark
+
+			$("#switch").on('click', function () {
+				if ($("body").hasClass("dark")) {
+					$("body").removeClass("dark");
+					$("#switch").removeClass("switched");
+				}
+				else {
+					$("body").addClass("dark");
+					$("#switch").addClass("switched");
+				}
+			});
+
+		})(jQuery); 
+	</script>
+
+</body>
+
+</html>

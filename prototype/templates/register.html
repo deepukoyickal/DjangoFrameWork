@@ -1,0 +1,127 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+<title>Register</title>
+{% endblock %}
+
+{% block content %}
+<div class="tab-pane fade show active" id="nav-register" role="tabpanel" aria-labelledby="register-tab">
+  <div class="container py-5 h-100 " style="margin-top: 5%; margin-bottom:5%;" id="register_div" >
+    <div class="row justify-content-center align-items-center h-100">
+      <div class="col-12 col-lg-9 col-xl-8">
+        <div class="card border border-info " style="border-radius: 15px;">
+          <div class="card-body p-4 p-md-5">
+            <h3 class="text-center text-info mb-4 pb-2 pb-md-0 mb-md-5 font-weight-bold">Register</h3>
+            <form id="registration_form" enctype="multipart/form-data" method="post" action="/register/">
+                {% csrf_token %}
+              <div class="row">                     
+                  <div class="col-md-6 mb-4">      
+                      <div class="form-outline">
+                        {{ form.first_name|as_crispy_field }}
+                      </div>      
+                  </div>
+                  <div class="col-md-6 mb-4">      
+                      <div class="form-outline">
+                        {{ form.last_name|as_crispy_field }}
+                      </div>      
+                  </div>                        
+              </div>
+              <div class="row">                     
+                  <div class="col-md-6 mb-4">      
+                      <div class="form-outline">
+                        {{ form.email|as_crispy_field }}
+                      </div>      
+                  </div>
+                  <div class="col-md-6 mb-4">      
+                      <div class="form-outline">
+                        {{ form.userType|as_crispy_field }}
+                      </div>      
+                  </div>                        
+              </div>
+              <div class="row">                     
+                  <div class="col-md-6 mb-4">      
+                      <div class="form-outline">
+                        {{ form.password|as_crispy_field }}
+                      </div>      
+                  </div>
+                  <div class="col-md-6 mb-4">      
+                      <div class="form-outline">
+                        {{form.confirm_password|as_crispy_field }}
+                      </div>      
+                  </div>                        
+              </div>  
+              
+              <div class="row">                     
+                <div class="col-md-6 mb-4">      
+                    <div class="form-outline">
+                      {{ form.terms|as_crispy_field }}
+                    </div>      
+                </div>                      
+            </div>  
+              
+              <div class="row">
+                  <div class="col text-center">        
+                      <input class="btn btn-outline-success btn-lg" type="submit" value="Submit" onclick="return validate();" /> 
+                  </div>
+              </div>      
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+
+
+       
+            
+      <script type="text/javascript">
+
+        function validate()
+        {
+            password = document.getElementById('password').value;
+            confirm_password = document.getElementById('confirm_password').value;    
+            if (password != confirm_password){
+                alert('password is not matching..')
+                return false
+            }
+            terms = document.getElementById('terms').value;
+            if (! terms)
+            {
+              alert('please accept terms and conditions')
+              return false
+            }
+        }
+        function getOTP(formid,url,nextdiv,previousdiv,otherdiv)
+        {   
+            $(document).on('submit', formid, function (e) {
+                e.preventDefault();
+                var form_data = new FormData($(this)[0]);                    
+                    $.ajax({
+                        type:'POST',
+                        url: url,
+                        processData: false,
+                        contentType: false,
+                        data : form_data,
+                        beforeSend: function() {
+                            $("#loader_loader").show();
+                        },
+                        success: function(response) {
+                            $("#" + previousdiv).hide();
+                            $("#" + otherdiv).hide();
+                            $("#loader_loader").hide();
+                            $("#" + nextdiv).show();
+                            user_email = document.getElementById('email_otp').value;
+                            document.getElementById('email').value = user_email;
+                            document.getElementById('conf_email').value = user_email;
+                            
+                        }
+                    });
+               });        
+        }
+            
+            
+        
+      </script>
+    {% endblock %}

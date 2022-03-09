@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+<title>Register</title>
+{% endblock %}
+
+{% block content %}
+<!--  -->
+<section class="vh-100 bg-light">
+  <div class="container py-5 h-100">
+    <div class="row d-flex justify-content-center align-items-center h-100 ">
+      <div class="col-12 col-md-8 col-lg-6 col-xl-5 ">
+        <div class="card-body p-5 text-center bg-white border border-primary" style="border-radius: 1rem; box-shadow: 2px 5px 4px 5px #888888">
+          <h3 class="text-center text-primary mb-4 pb-2 pb-md-0 mb-md-5 font-weight-bold">Get OTP via Email</h3>
+          {% for message in messages %}
+    
+                <div class="alert alert-success m-2">
+                    <a class="close" href="#" data-dismiss="alert"></a>
+                    {{ message }}
+                </div>
+
+            {% endfor %}
+          <div class="form-outline mb-4">
+            <form id="otp_form" enctype="multipart/form-data" method="post" action="/getotp/">
+              {% csrf_token %}
+              {{ otpform.email | as_crispy_field }}
+              <button class="btn btn-outline-success" type="submit" id="spinner_button"
+                onclick="getOTP('#otp_form','/getotp/','#loader_loader')">Get OTP
+                <div class="spinner-border " role="status" id="loader_loader" style="display: none;"></div>
+              </button>
+            </form>
+          </div>
+      </div>
+    </div>
+  </div>
+  </div>
+</section>
+<!--  -->
+
+<script type="text/javascript">
+
+  function loading(loader) {
+    $(loader).show();
+  }
+
+  function validate() {
+    password = document.getElementById('password').value;
+    confirm_password = document.getElementById('confirm_password').value;
+    if (password != confirm_password) {
+      alert('password is not matching..')
+      return false
+    }
+  }
+  function getOTP(formid, url, loader) {
+    $(document).on('submit', formid, function (e) {
+      var form_data = new FormData($(this)[0]);
+      $.ajax({
+        type: 'POST',
+        url: url,
+        processData: false,
+        contentType: false,
+        data: form_data,
+        beforeSend: function () {
+          $(loader).show();
+        },
+        success: function (response) {
+          $(loader).hide();
+
+        }
+      });
+    });
+  }
+
+
+
+</script>
+{% endblock %}

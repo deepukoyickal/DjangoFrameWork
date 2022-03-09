@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+{% load crispy_forms_tags %}
+{% block title %}
+<title>Apply Job</title>
+{% endblock %}
+{% block content%}
+<div class="container justify-content-center">
+    <div class="container mt-5 card p-5 mb-5">
+        <h4 class="text-center mb-3">Apply for {{job.job_title}}</h4>
+        <div class="row d-flex justify-content-center">
+            <div class="col-md-8">
+                <form method='post' action="/apply_job/{{job.id}}/" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-md-6">
+                            {{form.first_name|as_crispy_field}}
+                        </div>
+                        <div class="col-md-6">
+                            {{form.last_name|as_crispy_field}}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 d-flex">
+                            {{form.country_code|as_crispy_field}}
+                            {{form.phone|as_crispy_field}}
+                        </div>
+                        <div class="col-md-6">
+                            {{form.email|as_crispy_field}}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label>Qualification</label>
+                            <select name="qualification" class="form-control custom-select bg-white">
+                                {% for q in qualification %}
+                                    <option value="{{q}}">{{q}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-6" oninput="viewYear('experience','#years')">
+                            {{form.experience|as_crispy_field}}
+                        </div>
+                    </div>
+                    <div class="row" id="years" style="display:none;">
+                        <div class="col-md-12">
+                            {{form.years|as_crispy_field}}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12" oninput="validateFile('applicants_resume')">
+                            {{form.resume|as_crispy_field}}
+                        </div>
+                    </div>  
+                    <div class="row">
+                        <div class="col-md-12 text-center">
+                            <button class="btn btn-success" type="submit"> 
+                                Apply Now
+                            </button>
+                        </div>
+                    </div>                 
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function viewYear(id,divId){
+        if(document.getElementById(id).value == 'True')
+        {
+            $(divId).show();
+        }
+        else
+        {
+            $(divId).hide();
+        }
+    }
+    function alertUser(message){
+        alert(message)
+    }
+</script>
+{% endblock %}

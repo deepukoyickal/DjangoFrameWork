@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+<title>Register</title>
+{% endblock %}
+
+{% block content %}
+
+<!-- start of email and otp field after sending otp -->
+<div class="container py-5 h-100 " style="margin-top: 5%; margin-bottom:5%;" id="otp_confirm_div">
+    <div class="row justify-content-center align-items-center h-100">
+      <div class="col-12 col-lg-9 col-xl-8">
+        <div class=" card border border-primary " style="border-radius: 15px;">
+          <div class="p-4 p-md-5">
+            <h3 class="text-center text-primary  mb-4 pb-2 pb-md-0 mb-md-5 font-weight-bold">Verify OTP</h3>
+            <form id="otp_insert" method="post" action="/verifyotp/" enctype="multipart/form-data">
+                {% csrf_token %}   
+                
+                <div class="row text-left w-75" style="margin-left: 12.5%;">
+                  <div class="col mb-4">      
+                    <div class="form-outline">
+                      <label class="text-success">An OTP is send to:</label>
+                    </div>      
+                  </div>
+              </div>    
+                <div class="row text-center w-75" style="margin-left: 12.5%;">
+                  <div class="col mb-4">      
+                    <div class="form-outline">
+                      {{ otpform.conf_email | as_crispy_field }}
+                    </div>      
+                  </div>
+              </div>          
+            <div class="row text-center w-75" style="margin-left: 12.5%;">
+                <div class="col mb-4">      
+                  <div class="form-outline">
+                    {{ otpform.otp | as_crispy_field }}
+                  </div>      
+                </div>
+            </div>    
+            
+            <div class="row">
+                <div class="col text-center">        
+                    <button class="btn btn-outline-success" type="submit" id="spinner_button">Verify OTP
+                        <div class="spinner-border ml-1" role="status" id="loader_loader" style="display: none;"></div>  </button>
+                </div>
+            </div>    
+            </form>                          
+            <div class="row">
+                <form id="resend_form">
+                    {% csrf_token %}
+                    <div class="col-md-6 mb-4 text-center">      
+                        <div class="form-outline">
+                            {{otpform.resend_email | as_crispy_field}}
+
+                            <button class="btn btn-link" type="submit"  onclick="getOTP('#resend_form','/resendotp/','otp_confirm_div','otp_div','#loader_loader2')" id="spinner_button" >Resend OTP
+                                <div class="spinner-border " role="status" id="loader_loader2" style="display: none;"></div>  </button>
+                                      
+                        </div>      
+                    </div> 
+                </form>   
+            </div>
+              
+              </div>      
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<!-- endo of email and otp field after sendign otp -->
+
+<script type="text/javascript">
+
+    function validate()
+    {
+        password = document.getElementById('password').value;
+        confirm_password = document.getElementById('confirm_password').value;    
+        if (password != confirm_password){
+            alert('password is not matching..')
+            return false
+        }
+    }
+    function getOTP(formid,url,nextdiv,previousdiv,loader)
+    {   
+        $(document).on('submit', formid, function (e) {
+            e.preventDefault();
+            var form_data = new FormData($(this)[0]);                    
+                $.ajax({
+                    type:'POST',
+                    url: url,
+                    processData: false,
+                    contentType: false,
+                    data : form_data,
+                    beforeSend: function() {
+                        $(loader).show();
+                    },
+                    success: function(response) {
+                        $("#" + previousdiv).hide();
+                        $(loader).hide();
+                        $("#" + nextdiv).show();
+                        user_email = document.getElementById('email_otp').value;
+                        document.getElementById('conf_email').value = user_email;
+                        document.getElementById('resend_email').value = user_email;
+                    }
+                });
+           });        
+    }
+        
+        
+    
+  </script>
+{% endblock %}

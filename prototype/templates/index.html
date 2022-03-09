@@ -1,0 +1,654 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+{% block title %}
+<title>home</title>
+{% endblock %}
+{% block content%}
+<div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab" style="position: relative;">
+  <div style="background-image: url('/static/images/bg5.jpg'); background-repeat: no-repeat; background-size: cover;">
+    <div class="hero-wrap">
+      <div class="home-slider owl-carousel">
+        <div class="slider-item" style="background-image:url('/static/images/slider1.jpg');">
+          <div class="overlay"></div>
+          <div class="container">
+            <div class="row no-gutters slider-text align-items-center justify-content-center">
+              <div class="col-md-10 ftco-animate">
+                <div class="text w-100 text-center">
+                  <h2>You think! We Incubate</h2>
+                  <h1 class="mb-4">AIC-IIIT KOTTAYAM</h1>
+                  <p><a href="#Contact" class="btn btn-white">Connect with us</a></p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="slider-item" style="background-image:url('/static/images/slider2.jpg');">
+          <div class="overlay"></div>
+          <div class="container">
+            <div class="row no-gutters slider-text align-items-center justify-content-center">
+              <div class="col-md-10 ftco-animate">
+                <div class="text w-100 text-center">
+                  <h2>We will promote your company</h2>
+                  <h1 class="mb-4">Kick Start your Journey</h1>
+                  <p><a href="#Contact" class="btn btn-white">Connect with us</a></p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="slider-item" style="background-image:url('/static/images/slider3.jpg');">
+          <div class="overlay"></div>
+          <div class="container">
+            <div class="row no-gutters slider-text align-items-center justify-content-center">
+              <div class="col-md-10 ftco-animate">
+                <div class="text w-100 text-center">
+                  <h2>Welcome to AIC-IIIT Kottayam</h2>
+                  <h1 class="mb-4">We help to reach your goals</h1>
+                  <p><a href="#Contact" class="btn btn-white">Connect with us</a></p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <section class="ftco-section py-5 bg-light" id="Contact">
+      <div class="container d-flex align-items-center justify-content-center">
+        <div class="row ">
+          <div class="col-md-4">
+            <div class="intro-box w-100 d-flex">
+              <div class="icon border border-primary d-flex align-items-center justify-content-center text-primary">
+                <span class="fa fa-phone fa-lg"></span>
+              </div>
+              <div class="text pl-3">
+                <h4 class="mb-0">Call us: +91-482-2202157 +91-9400063494 +91-9400063492 +91-9443543746</h4>
+                <span> Building no.340, Karoor Valavoor.P.O., Kottayam, Kerala 686635.</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="intro-box w-100 d-flex">
+              <div class="icon border border-primary d-flex align-items-center justify-content-center text-primary">
+                <span class="fa fa-clock fa-lg"></span>
+              </div>
+              <div class="text pl-3">
+                <h4 class="mb-0">Opening Hours</h4>
+                <span>Mon-Sat 9:00 AM - 5:00 PM /</span><br>
+                <span>Sundays closed</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="intro-box w-100">
+              <button class="btn btn-outline-primary" data-toggle="modal" data-target="#appointmentModal">Make an
+                Appointment</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="modal fade" id="appointmentModal" tabindex="-1" role="dialog" aria-labelledby="appointmentModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5>Request Appointment</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form id="appointment_form" enctype="multipart/form-data">
+              {% csrf_token %}
+              {% if not user.is_authenticated %}
+              <div class="form-group">
+                <label for="recipient-name" class="col-form-label">Name:</label>
+                <input type="text" name="name" class="form-control" required>
+              </div>
+              <div class="form-group">
+                <label for="recipient-name" class="col-form-label">Email:</label>
+                <input type="email" name="email" class="form-control" required>
+              </div>
+              <div class="form-group">
+                <label for="recipient-name" class="col-form-label">Phone:</label>
+                <input type="text" name="mobile" class="form-control" required>
+              </div>
+              {% endif %}
+              <div class="form-group">
+                <label for="recipient-name" class="col-form-label">Date</label>
+                <input type="date" name="date" class="form-control" id="date" required>
+              </div>
+              <div class="form-group">
+                <label for="recipient-name" class="col-form-label">Time</label>
+                <input type="time" name="time" class="form-control" id="time" required>
+              </div>
+              <div class="form-group">
+                <label for="message-text" class="col-form-label">Purpose:</label>
+                <textarea class="form-control" name="purpose" required></textarea>
+              </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary"
+              onclick="validate('#appointment_form','/appointment/')">Request Appointment</button>
+          </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <section class="ftco-section bg-light" id="about">
+      <div class="container">
+        <div class="row justify-content-center pb-5 mb-3">
+          <div class="col-md-7 heading-section text-center ftco-animate">
+            <h2>We can help you in different situations</h2>
+            <span class="subheading">We offer Services</span>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-3 d-flex services align-self-stretch px-4 ftco-animate">
+            <div class="d-block text-center">
+              <div class="icon d-flex justify-content-center align-items-center">
+                <span class="flaticon-goal"></span>
+              </div>
+              <div class="media-body p-2 mt-3">
+                <h3 class="heading">Mentors</h3>
+                <p>We hav a panel of 60+ mentors. Expertise in different areas to support startups</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3 d-flex services align-self-stretch px-4 ftco-animate">
+            <div class="d-block text-center">
+              <div class="icon d-flex justify-content-center align-items-center">
+                <span class="flaticon-stress"></span>
+              </div>
+              <div class="media-body p-2 mt-3">
+                <h3 class="heading">Company Space</h3>
+                <p>Provide company space and access to resources</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3 d-flex services align-self-stretch px-4 ftco-animate">
+            <div class="d-block text-center">
+              <div class="icon d-flex justify-content-center align-items-center">
+                <span class="flaticon-crm"></span>
+              </div>
+              <div class="media-body p-2 mt-3">
+                <h3 class="heading">Investors &amp; Funding</h3>
+                <p>Help in making pitch for investor meets. Help in geting funds and arrange sessings with investors</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3 d-flex services align-self-stretch px-4 ftco-animate">
+            <div class="d-block text-center">
+              <div class="icon d-flex justify-content-center align-items-center">
+                <span class="flaticon-marriage"></span>
+              </div>
+              <div class="media-body p-2 mt-3">
+                <h3 class="heading">Services</h3>
+                <p>We help in developing the prototype and MVP</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="ftco-section bg-light">
+      <div class="container">
+        <div class="row justify-content-center pb-5 mb-3">
+          <div class="col-md-7 heading-section text-center ftco-animate">
+            <h2>Why AIC IIIT Kottayam?</h2>
+          </div>
+        </div>
+        <div class="row d-flex no-gutters">
+          <div class="col-md-6 d-flex">
+            <div
+              class="img img-video d-flex align-self-stretch align-items-center justify-content-center justify-content-md-end mb-4 mb-sm-0"
+              style="background-image:url('/static/images/slider1.jpg');">
+              <a href="https://www.youtube.com/watch?v=hUPjQ_X4qJs"
+                class="icon-video popup-vimeo d-flex justify-content-center align-items-center">
+                <!-- <span class="fa fa-play"></span> -->
+                <i class="fa fa-play" style="font-size:48px;color:rgb(253, 247, 247)"></i>
+              </a>
+            </div>
+          </div>
+          <div class="col-md-6 pl-md-5 py-md-5">
+            <div class="services-2 w-100 d-flex">
+              <div class="icon d-flex align-items-center justify-content-center"><span class="flaticon-account"></span>
+              </div>
+              <div class="text pl-4">
+                <h4>Accountability</h4>
+                <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia</p>
+              </div>
+            </div>
+            <div class="services-2 w-100 d-flex">
+              <div class="icon d-flex align-items-center justify-content-center"><span class="flaticon-skills"></span>
+              </div>
+              <div class="text pl-4">
+                <h4>Expertise</h4>
+                <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia</p>
+              </div>
+            </div>
+            <div class="services-2 w-100 d-flex">
+              <div class="icon d-flex align-items-center justify-content-center"><span
+                  class="flaticon-performance"></span></div>
+              <div class="text pl-4">
+                <h4>Speed</h4>
+                <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia</p>
+              </div>
+            </div>
+            <div class="services-2 w-100 d-flex">
+              <div class="icon d-flex align-items-center justify-content-center"><span class="flaticon-event"></span>
+              </div>
+              <div class="text pl-4">
+                <h4>Delivery</h4>
+                <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="ftco-counter" id="section-counter">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-6 col-lg-3 d-flex justify-content-center counter-wrap ftco-animate">
+            <div class="block-18 text-center">
+              <div class="text">
+                <strong class="number" data-number="42">0</strong>
+              </div>
+              <div class="text">
+                <span>Number of Startups</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-3 d-flex justify-content-center counter-wrap ftco-animate">
+            <div class="block-18 text-center">
+              <div class="text">
+                <strong class="number" data-number="141">0</strong>
+              </div>
+              <div class="text">
+                <span>Jobs Created</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-3 d-flex justify-content-center counter-wrap ftco-animate">
+            <div class="block-18 text-center">
+              <div class="text">
+                <strong class="number" data-number="12">0</strong>
+              </div>
+              <div class="text">
+                <span>Submissions</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-3 d-flex justify-content-center counter-wrap ftco-animate">
+            <div class="block-18 text-center">
+              <div class="text">
+                <strong class="number" data-number="11">0</strong>
+              </div>
+              <div class="text">
+                <span>IP Generated</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+
+    <section class="ftco-section testimony-section bg-info">
+      <div class="container">
+        <div class="row justify-content-center pb-5 mb-3">
+          <div class="col-md-7 heading-section heading-section-white text-center ftco-animate">
+            <h2>Happy Clients &amp; Feedbacks</h2>
+            <span class="subheading">Testimonies</span>
+          </div>
+        </div>
+        <div class="row ftco-animate">
+          <div class="col-md-12">
+            <div class="carousel-testimony owl-carousel ftco-owl">
+              <div class="item">
+                <div class="testimony-wrap py-4">
+                  <div class="icon d-flex align-items-center justify-content-center"><span
+                      class="fa fa-quote-left"></span></div>
+                  <div class="text">
+                    <p class="mb-4">Far far away, behind the word mountains, far from the countries Vokalia and
+                      Consonantia, there live the blind texts.</p>
+                    <div class="d-flex align-items-center">
+                      <div class="user-img" style="background-image: url(images/person_1.jpg)"></div>
+                      <div class="pl-3">
+                        <p class="name">Roger Scott</p>
+                        <span class="position">Marketing Manager</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="item">
+                <div class="testimony-wrap py-4">
+                  <div class="icon d-flex align-items-center justify-content-center"><span
+                      class="fa fa-quote-left"></span></div>
+                  <div class="text">
+                    <p class="mb-4">Far far away, behind the word mountains, far from the countries Vokalia and
+                      Consonantia, there live the blind texts.</p>
+                    <div class="d-flex align-items-center">
+                      <div class="user-img" style="background-image: url(images/person_2.jpg)"></div>
+                      <div class="pl-3">
+                        <p class="name">Roger Scott</p>
+                        <span class="position">Marketing Manager</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="item">
+                <div class="testimony-wrap py-4">
+                  <div class="icon d-flex align-items-center justify-content-center"><span
+                      class="fa fa-quote-left"></span></div>
+                  <div class="text">
+                    <p class="mb-4">Far far away, behind the word mountains, far from the countries Vokalia and
+                      Consonantia, there live the blind texts.</p>
+                    <div class="d-flex align-items-center">
+                      <div class="user-img" style="background-image: url(images/person_3.jpg)"></div>
+                      <div class="pl-3">
+                        <p class="name">Roger Scott</p>
+                        <span class="position">Marketing Manager</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="item">
+                <div class="testimony-wrap py-4">
+                  <div class="icon d-flex align-items-center justify-content-center"><span
+                      class="fa fa-quote-left"></span></div>
+                  <div class="text">
+                    <p class="mb-4">Far far away, behind the word mountains, far from the countries Vokalia and
+                      Consonantia, there live the blind texts.</p>
+                    <div class="d-flex align-items-center">
+                      <div class="user-img" style="background-image: url(images/person_1.jpg)"></div>
+                      <div class="pl-3">
+                        <p class="name">Roger Scott</p>
+                        <span class="position">Marketing Manager</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="item">
+                <div class="testimony-wrap py-4">
+                  <div class="icon d-flex align-items-center justify-content-center"><span
+                      class="fa fa-quote-left"></span></div>
+                  <div class="text">
+                    <p class="mb-4">Far far away, behind the word mountains, far from the countries Vokalia and
+                      Consonantia, there live the blind texts.</p>
+                    <div class="d-flex align-items-center">
+                      <div class="user-img" style="background-image: url(images/person_2.jpg)"></div>
+                      <div class="pl-3">
+                        <p class="name">Roger Scott</p>
+                        <span class="position">Marketing Manager</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="ftco-section testimony-section bg-light" id="news">
+      <div class="container">
+        <div class="row justify-content-center pb-5 mb-3">
+          <div class="col-md-7 heading-section heading-section-white text-center ftco-animate">
+            <h2>Latest News</h2>
+          </div>
+        </div>
+        <div class="row ftco-animate">
+          <div class="col-md-12">
+            <div class="carousel-testimony owl-carousel ftco-owl">
+              {% for item in news %}
+              <div class="item">
+                <div class="testimony-wrap py-4">
+                  <div class="icon d-flex align-items-center justify-content-center"><span
+                      class="fa-solid fa-newspaper"></span></div>
+                  <div class="text">
+                    <div class="d-flex align-items-center">
+                      <div class="user-img" style="background-image: url(images/person_1.jpg)"></div>
+                      <div class="pl-3">
+                       <p><a href="/news/" class="font-weight-bold">{{item.title}}</a></p>
+                        <span class="position">{{item.date|naturalday}}</span>
+                      </div>
+                    </div>
+                    <div class="row" style="height: 100px; overflow:hidden">
+                      <p class="mb-4">{{item.content}}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <section class="ftco-section" id="OurTeam">
+      <div class='container item_block mx-auto mt-5 col-md-10 mt-100'>
+        <div class="row justify-content-center pb-5 mb-3">
+          <div class="col-md-7 heading-section heading-section-white text-center ftco-animate">
+            <h2>Our Team</h2>
+          </div>
+        </div>
+        
+        <div class="row justify-content-center pb-5">
+            {% for member in team %}
+            <div class="card col-md-3 mt-100">
+                <div class="card-content">
+                    <div class="card-body p-0">
+                        {% if member.profile_pic %}
+                        <div class="profile"> <img src="{{MEDIA_URL}}{{member.profile_pic.url}}"> </div>
+                        {% else %}
+                        <div class="profile"> <img src="{% static 'images/profile.png' %}"> </div>                    
+                        {% endif %}
+                        <div class="card-title mt-4">{{member.first_name}} {{member.last_name}}<br/> 
+                          <small>{{member.designation}}</small><br>
+                          <small>+91-{{member.phone}}</small>
+                          <ul class="social mb-0 list-inline mt-3">
+                            <li class="list-inline-item" title="facebook"><a href="#" class="social-link"><i
+                                  class="fa-brands fa-facebook-f"></i></a></li>
+                            <li class="list-inline-item" title="twitter"><a href="#" class="social-link"><i
+                                  class="fa-brands fa-twitter"></i></a></li>
+                            <li class="list-inline-item" title="instagram"><a href="#" class="social-link"><i
+                                  class="fa-brands fa-instagram"></i></a></li>
+                            <li class="list-inline-item" title="linkedin"><a href="#" class="social-link"><i
+                                  class="fa-brands fa-linkedin"></i></a></li>
+                          </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+            
+        </div>
+    </div>    
+    </section>
+    <!-- <section class="ftco-section">
+  <div class="container">
+    <div class="row justify-content-center pb-5 mb-3">
+      <div class="col-md-7 heading-section text-center ftco-animate">
+        <h2>Latest news</h2>
+      </div>
+    </div>
+    <div class="row d-flex">
+      <div class="col-md-4 d-flex ftco-animate">
+        <div class="blog-entry align-self-stretch">
+          <a href="blog-single.html" class="block-20 rounded" style="background-image: url('static/images/bg1.jpg');">
+          </a>
+          <div class="text mt-3">
+              <div class="meta mb-2">
+              <div><a href="#">January 30, 2020</a></div>
+              <div><a href="#">Admin</a></div>
+              <div><a href="#" class="meta-chat"><span class="fa fa-comment"></span> 3</a></div>
+            </div>
+            <h3 class="heading"><a href="#">Even the all-powerful Pointing has no control about the blind texts</a></h3>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 d-flex ftco-animate">
+        <div class="blog-entry align-self-stretch">
+          <a href="blog-single.html" class="block-20 rounded" style="background-image: url('static/images/bg1.jpg');">
+          </a>
+          <div class="text mt-3">
+              <div class="meta mb-2">
+              <div><a href="#">January 30, 2020</a></div>
+              <div><a href="#">Admin</a></div>
+              <div><a href="#" class="meta-chat"><span class="fa fa-comment"></span> 3</a></div>
+            </div>
+            <h3 class="heading"><a href="#">Even the all-powerful Pointing has no control about the blind texts</a></h3>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+     -->
+
+    <!-- <section class="ftco-section ftco-no-pb ftco-no-pt">
+  <div class="container">
+      <div class="row">
+          <div class="col-md-12">
+              <div class="bg-secondary w-100 rounded p-4">
+                <div class="row">
+                  <div class="col-md-7 d-flex align-items-center">
+                    <h2 class="mb-3 mb-sm-0" style="color:black; font-size: 18px;">Subcribe for our weekly tips</h2>
+                  </div>
+                  <div class="col-md-5 d-flex align-items-center">
+                    <form action="#" class="subscribe-form">
+                      <div class="form-group d-flex">
+                        <input type="text" class="form-control" placeholder="Enter email address">
+                        <input type="submit" value="Subscribe" class="submit px-3">
+                      </div>
+                    </form>
+                  </div>
+              </div>
+              </div>
+            </div>
+          </div>
+  </div>
+</section> -->
+
+    <!-- <section class="ftco-section bg-light">
+      <div class="container">
+        <div class="row justify-content-center pb-5 mb-3">
+          <div class="col-md-7 heading-section text-center ftco-animate">
+            <h2>Business Model</h2>
+            <span class="subheading">Price &amp; Plans</span>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col ftco-animate">
+            <div class="block-7">
+              <div class="text-center">
+                <span class="text-dark">support contracts</span>
+                <span class="price"><span class="number">5k</span>
+                  <span class="">per month</span>
+
+
+                  <ul class="pricing-text mb-5">
+                    <li><span class="fa fa-check mr-2"></span>Incubate space</li>
+                    <li><span class="fa fa-check mr-2"></span>Knowledge assistance</li>
+                    <li><span class="fa fa-check mr-2"></span>6 to 12 months</li>
+                  </ul>
+                  <a href="https://goo.gl/forms/bYQ16uftJgLtssgr2"><button
+                      class="btn btn-primary ">Register</button></a>
+              </div>
+            </div>
+          </div>
+          <div class="col ftco-animate">
+            <div class="block-7">
+              <div class="text-center">
+                <span class="text-dark">Training contract</span>
+                <span class="price"><span class="number">1k</span>
+                  <span class="">per week</span>
+
+
+                  <ul class="pricing-text mb-5">
+                    <li><span class="fa fa-check mr-2"></span>Incubate space</li>
+                    <li><span class="fa fa-check mr-2"></span>Training support</li>
+                    <li><span class="fa fa-check mr-2"></span>1 to 4 weeks</li>
+                  </ul>
+
+                  <a href="https://goo.gl/forms/bYQ16uftJgLtssgr2"><button
+                      class="btn btn-primary ">Register</button></a>
+              </div>
+            </div>
+          </div>
+          <div class="col ftco-animate">
+            <div class="block-7">
+              <div class="text-center">
+                <span class="text-dark">Consultancy contracts</span>
+                <span class="price"><span class="number">10k</span>
+                  <span class="">per day</span>
+
+                  <ul class="pricing-text mb-5">
+                    <li><span class="fa fa-check mr-2"></span>Onsite support</li>
+                    <li><span class="fa fa-check mr-2"></span>Consultancy support</li>
+                    <li><span class="fa fa-check mr-2"></span>Network support</li>
+                  </ul>
+
+                  <a href="https://goo.gl/forms/bYQ16uftJgLtssgr2"><button
+                      class="btn btn-primary ">Register</button></a>
+              </div>
+            </div>
+
+          </div>
+        </div>
+    </section> -->
+  </div>
+</div>
+</div>
+<script>
+  function validate(formid, URL) {
+    var stime = '09:00';
+    var etime = '17:30';
+    var date = new Date(document.getElementById('date').value)
+    var time = document.getElementById('time').value
+    var now = new Date();
+    if (date < now || time < stime || time > etime) {
+      alert('date or time is not valid');
+    }
+    else {
+      $(document).on('submit', formid, function (e) {
+        e.preventDefault();
+        var form_data = new FormData($(this)[0]);
+        $.ajax({
+          type: 'POST',
+          url: URL,
+          processData: false,
+          contentType: false,
+          data: form_data,
+          success: function (response) {
+            alert('requested appointment successfully');
+            $(formid)[0].reset();
+            location.reload()
+
+          }
+        });
+      });
+    }
+
+  }
+</script>
+{% endblock %}

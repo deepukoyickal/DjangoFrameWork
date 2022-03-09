@@ -1,0 +1,54 @@
+
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+<title>Login</title>
+{% endblock %}
+{% block content %}
+<div class="contaner d-flex justify-content-center">
+    <div class="card p-5 bg-white border border-info" style="width: 40rem; margin-top:10%; margin-bottom:10%;border-radius: 15px;">
+        {% for message in messages %}
+    
+                <div class="alert alert-success m-2 w-50">
+                    <a class="close" href="#" data-dismiss="alert"></a>
+                    {{ message }}
+                </div>
+
+            {% endfor %}
+        <h2 class="text-center text-primary mb-2 pb-2 pb-md-0 mb-md-5 font-weight-bold">Login</h2>       
+            <form action="" method="post">
+                {% csrf_token %}
+                <div class="row justify-content-center text-body" >
+                    
+                        {{ form|crispy }}
+                        
+
+                       
+                </div>
+               
+
+                <div class="row justify-content-center">
+                   
+                        <input type="submit" class="btn btn-outline-success" value="Login">      
+                  
+                </div>         
+                <div class="form-group d-md-flex">
+                    <!-- <div class="w-50">
+                        <label class="checkbox-wrap checkbox-primary text-light font-weight-normal">Remember Me
+                                      <input type="checkbox" checked>
+                                      <span class="checkmark"></span>
+                                    </label>
+                    </div> -->
+                                <div class="w-50">
+                                    <a href="#" style="color: rgb(2, 0, 0)">Forgot Password?</a>
+                                </div>
+                </div>
+                   
+            </form> 
+            
+    </div>
+</div>
+
+    
+    {% endblock %}

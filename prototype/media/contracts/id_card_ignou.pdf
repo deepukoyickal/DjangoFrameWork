@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-152853495-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'UA-152853495-1');
+    </script>    <meta name="csrf-param" content="_csrf">
+<meta name="csrf-token" content="b-szhSEcmbPViBiqBBEXHXoT2pZNcIU7Rac6S9PyUfYVrGrGa3_K4uPPeeNrZ2UoPWXupjdBwEMoxn8jo6cZpA==">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Indira Gandhi National Open University</title>
+    <link href="/assets/9ba84c64/css/bootstrap.css?v=1550073338" rel="stylesheet">
+<link href="/assets/3ee2aa70/css/site.css?v=1611661942" rel="stylesheet">
+<link href="/assets/3ee2aa70/css/juiprint.css?v=1611661942" rel="stylesheet">    </head>
+<body>
+
+<nav id="topNav" class="navbar navbar-default">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <a class="navbar-brand" href="/index.php/site/index"><img id="jui-app-logo" class="img-responsive"
+                                                                                src="/assets/3ee2aa70/site_files/logo-light.png"
+                                                                                alt="Indira Gandhi National Open University
+"/></a>
+        </div>
+
+        <ul class="nav navbar-nav">
+                            <li class="nav-item">
+                    <a href="http://ignou.ac.in/userfiles/Common-Prospectus-English.pdf" target="_blank">
+                        <span class="text-bold">Admission<br/>
+                                <small>Information Bulletin</small>
+                        </span>
+                    </a>
+                </li>
+                        <li class="nav-item text-bold dropdown visible-xs-inline">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                   aria-expanded="false">Helpdesk <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    <li><a href="/index.php/site/helpline">Helpline</a></li>
+                </ul>
+            </li>
+                            <li class="nav-item text-bold visible-xs-inline">
+                    <a href="/index.php/site/index">Sign In</a>
+                </li>
+                    </ul>
+            </div><!-- /.container-fluid -->
+</nav>
+
+<nav id="mainNav" class="navbar navbar-default">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                    data-target="#mainNav-navitems" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+        </div>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="mainNav-navitems">
+            <ul class="nav navbar-nav">
+                <li class="text-bold"><a href="/index.php/site/index">HOME</a></li>
+                                    <li><a href="http://www.ignou.ac.in/ignou/aboutignou/regional/website" target="_blank">REGIONAL
+                            CENTERS</a></li>
+                                <li><a href=/index.php/site/faq target="_blank">ADMISSION FAQ</a></li>
+                <li><a href=/index.php/site/programmes>PROGRAMME INFORMATION</a></li>
+                <li><a href=https://ignouadmission.samarth.edu.in/ignou_user_guide.pdf>USER GUIDE</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+
+                <li class="text-bold dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                       aria-expanded="false">
+                        Helpdesk <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="/index.php/site/helpline">Helpline</a></li>
+                    </ul>
+                </li>
+                                                    <li class="text-bold"><a href="/index.php/site/index">Sign In</a></li>
+                            </ul>
+        </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+</nav>
+
+<div id="du-page-wrapper">
+        <div class="container-fluid">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="panel panel-jui panel-login">
+                <div class="panel-heading">
+                    <div class="panel-title">
+                        Welcome to Admission Portal JANUARY 2021                    </div>
+                </div>
+                <div class="panel-body">
+                    Registration Process is over for JANUARY 2021 session.
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="panel panel-jui panel-login">
+                <div class="panel-heading">
+                    <div class="panel-title">
+                        Registered User Login
+                    </div>
+                </div>
+                <div class="panel-body">
+
+                    <form id="login-form" action="/index.php/site/index" method="post">
+<input type="hidden" name="_csrf" value="b-szhSEcmbPViBiqBBEXHXoT2pZNcIU7Rac6S9PyUfYVrGrGa3_K4uPPeeNrZ2UoPWXupjdBwEMoxn8jo6cZpA==">                    <div class="form-group field-jiloginform-username required">
+<label class="control-label" for="jiloginform-username">Registered Username</label>
+<input type="text" id="jiloginform-username" class="form-control no-border-radius" name="JILoginForm[username]" placeholder="Enter Registered Username" aria-required="true">
+
+<p class="help-block help-block-error"></p>
+</div>                    <div class="form-group field-jiloginform-password required">
+<label class="control-label" for="jiloginform-password">Password</label>
+<input type="password" id="jiloginform-password" class="form-control no-border-radius" name="JILoginForm[password]" placeholder="Password" aria-required="true">
+
+<p class="help-block help-block-error"></p>
+</div>                    <label class="control-label">Captcha Verification</label>
+                    <div class='well'>
+                        <div class="form-group field-jiloginform-verifycode">
+
+<div class="row"><div class="col-xs-6"><img id="jiloginform-verifycode-image" src="/index.php/site/captcha?v=60b5d56c1bfde3.43243470" alt=""></div><div class="col-xs-6"><span style="font-size:0.8em;vertical-align: top;">Type the text</span><input type="text" id="jiloginform-verifycode" class="form-control" name="JILoginForm[verifyCode]"></div></div>
+
+<p class="help-block help-block-error"></p>
+</div>                        <span style="font-size:0.8em;"> Click on the text to change</span>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary no-border-radius btn-lg btn-block" name="login-button">Login</button>                    </div>
+                    </form>                </div>
+                <div class="panel-footer">
+                    <ul>
+                        <li><a href="/index.php/registration/adm/request-password-reset"><em>Forgot Password?</em></a>                            Click to Reset your Password
+                        </li>
+                        <li><a href="/index.php/registration/adm/request-username-reset"><em>Forgot Username?</em></a>                            Click to Reset your Username
+                        </li>
+                        <li><a href="https://ignou2020july.samarth.edu.in" target="_blank"><em>For JULY 2020 Admission</em></a></li>
+                        <li><a href="https://ignou2020jan.samarth.edu.in" target="_blank"><em>For JANUARY 2020 Admission</em></a></li>
+                        <li><a href="https://onlineadmission.ignou.ac.in/oldadmission/Login.aspx" target="_blank"><em>OLD STUDENT LINK (BEFORE JAN 2020)</em></a></li>
+                    </ul>
+                </div>
+            </div>
+                    </div>
+    </div>
+</div></div>
+<footer class="footer">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-6">&copy;<a href="https://samarth.edu.in" target="_blank"> Samarth 2021</a>
+            </div>
+        </div>
+    </div>
+</footer>
+<script src="/assets/52de7d22/jquery.js?v=1588632646"></script>
+<script src="/assets/664c2be3/yii.js?v=1608738283"></script>
+<script src="/assets/664c2be3/yii.validation.js?v=1608738283"></script>
+<script src="/assets/664c2be3/yii.captcha.js?v=1608738283"></script>
+<script src="/assets/664c2be3/yii.activeForm.js?v=1608738283"></script>
+<script src="/assets/9ba84c64/js/bootstrap.min.js?v=1550073338"></script>
+<script>jQuery(function ($) {
+jQuery('#jiloginform-verifycode-image').yiiCaptcha({"refreshUrl":"\/index.php\/site\/captcha?refresh=1","hashKey":"yiiCaptcha\/site\/captcha"});
+jQuery('#login-form').yiiActiveForm([{"id":"jiloginform-username","name":"username","container":".field-jiloginform-username","input":"#jiloginform-username","error":".help-block.help-block-error","validate":function (attribute, value, messages, deferred, $form) {yii.validation.required(value, messages, {"message":"Registered Username cannot be blank."});}},{"id":"jiloginform-password","name":"password","container":".field-jiloginform-password","input":"#jiloginform-password","error":".help-block.help-block-error","validate":function (attribute, value, messages, deferred, $form) {yii.validation.required(value, messages, {"message":"Password cannot be blank."});}},{"id":"jiloginform-verifycode","name":"verifyCode","container":".field-jiloginform-verifycode","input":"#jiloginform-verifycode","error":".help-block.help-block-error","validate":function (attribute, value, messages, deferred, $form) {yii.validation.captcha(value, messages, {"hash":766,"hashKey":"yiiCaptcha/site/captcha","caseSensitive":false,"message":"The verification code is incorrect."});}}], []);
+});</script></body>
+</html>

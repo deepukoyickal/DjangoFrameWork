@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block title %}
+<title>view_applications</title>
+{% endblock %}
+
+{% block content %}
+<div class="container p-3 mt-3 border">
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <h4 class="text-dark">{{job.job_title}}</h4> 
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <table class="table table-bordered">
+                <thead class="bg-dark text-white">
+                    <th>Id</th>
+                    <th>Date</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Qualification</th>
+                    <th>CV</th>
+                </thead>
+                <tbody class="text-dark text-center">
+                {% for row in application %}
+                    {% if row.job_id == job.id %}
+                        <tr>
+                            <td>{{row.id}}</td>
+                            <td>{{row.date}}</td>
+                            <td>{{row.first_name}} {{row.last_name}}</td>
+                            <td>{{row.email}}</td>
+                            <td>{{row.phone}}</td>
+                            <td>{{row.qualification}}</td>
+                            <td><a href="/viewApplicantPdf/{{row.id}}/"><button class="btn-info">View CV</button></a></td>
+                        </tr>
+                    {% endif %}
+                {% endfor%}
+                </tbody>
+            </table>
+        </div>
+    </div>   
+</div>
+{% endblock %}

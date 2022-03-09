@@ -1,0 +1,410 @@
+{% extends "base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+<title>Profile</title>
+<style>
+    td {
+        width: 50%;
+    }
+</style>
+
+{% endblock %}
+
+{% block content %}
+<div class="container p-3">
+        <div class="card m-3">
+        <div class="card-body emp-profile bg-white mt-3 mb-3 p-3">
+            <form method="post">
+                <div class="row">
+                    <div class="col-md-4 d-flex flex-column align-items-center text-center p-3 py-5">
+                        <div class="profile-img">
+                            {% if not personal.profilepic %}
+                            <img class="rounded-circle mt-5" src="{% static 'images/profile.png' %}" width="90"
+                                height="90" onclick="showprofilepicuploadarea('profile_pic_upload_area');"><br>
+                            {% else %}
+                            <img class="rounded-circle mt-5" src="{{MEDIA_URL}}{{info.company_logo.url}}" width="90"
+                                height="90" onclick="showprofilepicuploadarea('profile_pic_upload_area');"><br>
+                            {% endif %}
+                        </div>
+                        <div class="profile-head text-dark">
+                            {% if basic.type == "Startup" %}
+                            <h5>{{info.companyname}}</h5>
+                            <h6>{{basic.type}}</h6>
+                            <p class="proile-rating text-info">Email : <span>{{basic.email}}</span></p>
+                                <div class="col-md-12 text-center">
+                                    <div class="container p-1 text-dark" style="font-size: 12px;">
+                                        Personal information {{p_percentage}}% completed
+                                        <div class="progress" style="height:10px;">
+                                            <div class="progress-bar bg-success" role="progressbar"
+                                                aria-valuenow="{{p_percentage}}" aria-valuemin="0" aria-valuemax="100">
+                                                {{p_percentage}}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 text-center">
+                                    <div class="container p-1 text-dark" style="font-size: 12px;">
+                                        Company information {{c_percentage}}% completed
+                                        <div class="progress" style="height:10px;">
+                                            <div class="progress-bar bg-info" role="progressbar"
+                                                aria-valuenow="{{c_percentage}}" aria-valuemin="0"
+                                                aria-valuemax="100">{{c_percentage}}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            
+                            {% elif user.type == "Mentor" %}
+                            <h5>{{personal.first_name}} {{personal.last_name}}</h5>
+                            {% endif %}
+                            
+                            {% if basic.type == "Startup" and info.applied_for_incubation and basic.approved == False %}
+                                <p class="text-success">Applied for incubation</p> 
+                                <button class="btn-success border border-none"><a class="text-white" href="/incubateStartup/{{basic.id}}/">Incubate</a></button>           
+                            {% elif basic.type == "Startup" and not info.applied_for_incubation and c_percentage >= 85 and p_percentage >= 85 %}
+                                <p class="text-danger">Not Applied for incubation</p>               
+                                    <button class="btn-info border border-none"><a href="/SendNotificationMail/{{basic.id}}">Notify them to apply</a></button>
+                                                            
+                            {% elif basic.type == "Startup" and info.applied_for_incubation and basic.approved == True %}
+                                <p class="text-success">Incubated</p>
+                            {% elif basic.type == "Mentor" and basic.approved == False %}
+                                <p class="text-danger">Approvation pending</p>    
+                            {% elif basic.type == "Mentor" and basic.approved == True %}   
+                                <p class="text-danger">Approved as Mentor</p>                       
+                            {% endif %}
+
+                            
+
+                        </div>
+                    </div>
+                    <div class="col-md-8 ">
+                        <ul class="nav nav-tabs" id="myTab" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active text-dark" id="home-tab" data-toggle="tab" href="#home"
+                                    role="tab" aria-controls="home" aria-selected="true">About Founder</a>
+                            </li>
+                            {% if basic.type == 'Mentor' %}
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" id="academic_info-tab" data-toggle="tab"
+                                    href="#academic_info" role="tab" aria-controls="academic_info"
+                                    aria-selected="false">Academic Info</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" id="career_info-tab" data-toggle="tab" href="#career_info"
+                                    role="tab" aria-controls="career_info" aria-selected="false">Career Info</a>
+                            </li>
+                            {% elif basic.type == 'Startup' %}
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" id="company_info-tab" data-toggle="tab"
+                                    href="#company_info" role="tab" aria-controls="company_info"
+                                    aria-selected="false">About Company</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" id="other_info-tab" data-toggle="tab" href="#other_info"
+                                    role="tab" aria-controls="other_info" aria-selected="false">Other Info</a>
+                            </li>
+                            {% if basic.type == "Startup" and info.applied_for_incubation and basic.approved == False %}
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" href="/uploadStartupContract/{{basic.id}}/" >Upload Contract</a>
+                            </li>
+                                
+                            {% endif %}
+
+                            {% endif %}
+                        </ul>
+                        <div class="tab-content profile-tab m-0" id="myTabContent">
+                            <div class="tab-pane fade show active text-dark" id="home" role="tabpanel"
+                                aria-labelledby="home-tab">
+                                <div class="row">
+                                    {% if personal.profilepic %}
+                                    <div class="col-md-12 text-center border">
+                                        <img class="rounded-circle m-2" src="{{MEDIA_URL}}{{personal.profilepic.url}}"
+                                            width="60" height="60"><br>
+                                    </div>
+                                    {% endif %}
+                                    <table class="table table-bordered">
+                                        <tbody>
+                                            <tr>
+                                                <td>Name</td>
+                                                <td>{{basic.first_name}} {{basic.last_name}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Email</td>
+                                                <td>{{basic.email}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Phone</td>
+                                                <td>{{personal.contact_number}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Date Of joined</td>
+                                                <td>{{basic.date_joined}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Address</td>
+                                                <td>{{personal.address}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            {% if basic.type == 'Mentor' %}
+                            <div class="tab-pane fade" id="academic_info" role="tabpanel"
+                                aria-labelledby="academic_info-tab">
+                                <table class="table table-bordered text-dark" style="table-layout: fixed;">
+                                    <tbody>
+                                        <tr>
+                                            {% if info.Bachelors_Degree == True %}
+                                            <td>Bachelors Degree</td>
+                                            <td>Yes</td>
+                                            {% else %}
+                                            <td>Bachelors Degree</td>
+                                            <td>No</td>
+                                            {% endif %}
+                                        </tr>
+                                        {% if info.Bachelors_Degree == True %}
+                                        <tr>
+                                            <td>Bachelor Degree Institute</td>
+                                            <td>{{info.B_Institute}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Bachelor Degree Subject</td>
+                                            <td>{{info.B_Subject}}</td>
+                                        </tr>
+                                        {% endif %}
+                                        <tr>
+                                            {% if info.Masters_Degree == True %}
+                                            <td>Master Degree</td>
+                                            <td>Yes</td>
+                                            {% else %}
+                                            <td>Master Degree</td>
+                                            <td>No</td>
+                                            {% endif %}
+                                        </tr>
+                                        {% if info.Masters_Degree == True %}
+                                        <tr>
+                                            <td>Master Degree Institute</td>
+                                            <td>{{info.M_Institute}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Master Degree Subject</td>
+                                            <td>{{info.M_Subject}}</td>
+                                        </tr>
+                                        {% endif %}
+                                        <tr>
+                                            <td>PHD</td>
+                                            {% if info.PHD == True %}
+                                            <td>Yes</td>
+                                            {% else %}
+                                            <td>No</td>
+                                            {% endif %}
+                                        </tr>
+                                        {% endif %}
+                                        {% if info.PHD == True %}
+                                        <tr>
+                                            <td>PHD Institute</td>
+                                            <td>{{info.P_Institute}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>PHD Subject</td>
+                                            <td>{{info.P_Subject}}</td>
+                                        </tr>
+                                        {% if info.post_doctorate == True %}
+                                        <tr>
+                                            <td>Post Doctorate Domain</td>
+                                            <td>{{info.post_doctorate_domain}}</td>
+                                        </tr>
+
+                            </div>
+                            {% endif %}
+
+                            </tbody>
+                            </table>
+                        </div>
+                        <div class="tab-pane fade" id="career_info" role="tabpanel" aria-labelledby="career_info-tab">
+                            <table class="table table-bordered text-dark" style="table-layout: fixed;">
+                                <tbody>
+                                    <tr>
+                                        <td>Designation</td>
+                                        <td>{{info.Designation}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Current working company</td>
+                                        <td>{{info.Current_working_company}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Work Experience</td>
+                                        <td>{{info.Previous_working_experience}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Working Domain</td>
+                                        <td>{{info.Working_Domain}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Experience as mentor</td>
+                                        <td>{{info.experience_as_mentor}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Contribution to startup</td>
+                                        <td>{{info.contribution_to_startup_echosystem}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Areas of Expertise</td>
+                                        <td>{{info.areas_of_expertise}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Supported any Startup?</td>
+                                        {% if info.supported_any_startup == True %}
+                                        <td>Yes</td>
+                                        {% else %}
+                                        <td>No</td>
+                                        {% endif %}
+                                    </tr>
+                                    <tr>
+                                        <td>Presently Residing</td>
+                                        <td>{{info.Presently_residing}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </div>
+                    {% elif basic.type == 'Startup' %}
+                    <div class="tab-pane fade" id="company_info" role="tabpanel" aria-labelledby="company_info-tab">
+                        <table class="table table-bordered text-dark" style="table-layout: fixed;">
+                            <tbody>
+                                <tr>
+                                    <td>Company Name</td>
+                                    <td>{{info.companyname}}</td>
+                                </tr>
+                                <tr>
+                                    <td>CIN number</td>
+                                    <td>{{info.cin_number}}</td>
+                                </tr>
+                                <tr>
+                                    <td>DIPP number</td>
+                                    <td>{{info.dipp_number}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Founder</td>
+                                    <td>{{info.founder}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Number of Directors</td>
+                                    <td>{{info.num_directors}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Number of Women Directors</td>
+                                    <td>{{info.num_women_dir}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Company Stage</td>
+                                    <td>{{info.stage}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Number of employess</td>
+                                    <td>{{info.employees}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Website</td>
+                                    <td>{{info.webpage}}</td>
+                                </tr>
+                                <tr>
+                                    <td>MSME registration</td>
+                                    <td>{{info.msme_registration}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Flagship Program</td>
+                                    <td>{{info.flagship_program}}</td>
+                                </tr>
+                                <tr>
+                                    <td>About</td>
+                                    <td>{{info.about}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Nature of firm</td>
+                                    <td>{{info.nature_of_firm}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Company address</td>
+                                    <td>{{info.company_address}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Startup pitch</td>
+                                    {% if info.startup_pitch %}
+                                    <td><a href="/startup_pitch/{{basic.id}}">View Pitch</a></td>
+                                    {% else %}
+                                    <td>Pitch not available</td>
+                                    {% endif %}
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="tab-pane fade" id="other_info" role="tabpanel" aria-labelledby="other_info-tab">
+                        <table class="table table-bordered text-dark" style="table-layout: fixed;">
+                            <tbody>
+                                <tr>
+                                    <td>Academic Qualification of Founder</td>
+                                    <td>{{info.academic_qualification_founder}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Field of Study</td>
+                                    <td>{{info.field_of_study}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Experience of Founder</td>
+                                    <td>{{info.experience_of_founder}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Core Competancy</td>
+                                    <td>{{info.core_competancy}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Expectation about AIC</td>
+                                    <td>{{info.expectation}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Other Info</td>
+                                    <td>{{info.other_info}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- <div class="tab-pane fade text-dark" id="contract" role="tabpanel" aria-labelledby="contract-tab">
+                       
+                        <form method="post" action="/profile/{{user_id}}/" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <input type="file" name="contract_pdf">
+                            <input type="submit" value="submit">
+                        </form>
+                    </div> -->
+                    {% endif%}
+
+                </div>
+        </div>
+        <div class="col-md-2">
+            <!-- <input type="submit" class="profile-edit-btn" name="btnAddMore" value="Edit Profile"/> -->
+        </div>
+        <!-- </div>
+        <div class="row"> -->
+        <div class="col-md-4">
+            <!-- <div class="profile-work">
+                    <p>WORK LINK</p>
+                    <a href="">Website Link</a><br/>
+                    <a href="">Bootsnipp Profile</a><br/>
+                    <a href="">Bootply Profile</a>
+                    <p>SKILLS</p>
+                    <a href="">Web Designer</a><br/>
+                    <a href="">Web Developer</a><br/>
+                    <a href="">WordPress</a><br/>
+                    <a href="">WooCommerce</a><br/>
+                    <a href="">PHP, .Net</a><br/>
+                </div> -->
+        </div>
+
+    </div>
+    </form>
+</div>
+</div>
+</div>
+{% endblock %}

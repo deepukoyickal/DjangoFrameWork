@@ -1,0 +1,241 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block content%}
+<style>
+
+</style>
+<div class="container-fluid display-table" style="margin-left:0; padding-left:0; margin:0; height:auto; margin-top:1%;">
+    <!-- start of page content -->
+    <div class="container bg-light rounded border-secondary " style=" margin-bottom:2%; width:auto; height:auto;"
+        id="content_profile_div">
+        <!-- div tabs -->
+        <div class="container">
+            <nav class="navbar navbar-expand-lg">
+                <ul class="navbar mr-auto">
+                    <li class="nav-item m-1" style=" font-family:'Courier New', Courier, monospace;">
+                        <a class="nav-link text-dark" id="personal_tab" href="#"
+                            onClick="show('mentor_personal_info','mentor_career_info','mentor_academic_info','personal_tab','career_tab','academic_tab')"
+                            style="border-bottom: 3px solid rgb(5, 21, 243);">Personal Info</a>
+                    </li>
+                    <li class="nav-item  m-1 " style="font-family:'Courier New', Courier, monospace">
+                        <a class="nav-link text-dark" id="career_tab" href="#"
+                            onClick="show('mentor_career_info','mentor_personal_info','mentor_academic_info','career_tab','personal_tab','academic_tab')">Career
+                            Info</a>
+                    </li>
+                    <li class="nav-item m-1" style="font-family:'Courier New', Courier, monospace">
+                        <a class="nav-link text-dark" id="academic_tab" href="#"
+                            onClick="show('mentor_academic_info','mentor_personal_info','mentor_career_info','academic_tab','personal_tab','career_tab')">Academic
+                            Info</a>
+                    </li>
+                </ul>
+            </nav>
+            <hr style="border-bottom: 1px; border-top: 1px solid rgb(4, 1, 29);">
+        </div>
+        <!-- start of personal info form -->
+        <div class="container rounded  h-100 " id="mentor_personal_info">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="d-flex flex-column align-items-center text-center p-3 py-5">
+                        <form enctype="multipart/form-data" id="profile_pic_form">
+                            {% csrf_token %}
+                            <div id="profile_pic_div">
+                                {% if not user_info.profilepic %}
+                                <img class="rounded-circle mt-5" src="{% static 'images/profile.png' %}" width="90"
+                                    height="90" onclick="showprofilepicuploadarea('profile_pic_upload_area');"><br>
+                                {% else %}
+                                <img class="rounded-circle mt-5" src="{{MEDIA_URL}}{{user_info.profilepic.url}}"
+                                    width="90" height="90"
+                                    onclick="showprofilepicuploadarea('profile_pic_upload_area');"><br>
+                                {% endif %}
+                                <span class="font-weight-bold">{{ user.first_name }}{{ user.last_name }}</span><br>
+                                <span class="text-black-50">{{user.email}}</span><br>
+                                <i class="bi bi-patch-check"></i>
+                                {% if user.approved == True %}
+                                <p class="text-success">Approved as {{user.type}}</p>
+                                {% else %}
+                                <p class="text-danger">Approvation pending</p>
+                                {% endif %}
+                            </div>
+                            <div class="container text-dark text-center">
+                                <div class="row">
+                                    <div class="col-md-12 mt-2 text-center">
+                                        <p style="font-size: 12px;">
+                                        <progress id="percent-loaded" style="width: 100%;" value="{{personal}}" max="100"></progress>
+                                        personal information {{personal}}% completed</p>
+                                        
+                                    </div>
+                                    <div class="col-md-12 mt-2">    
+                                        <p style="font-size: 12px;">                                  
+                                        <progress id="percent-loaded" style="width: 100%;" value="{{career}}" max="100"></progress>
+                                        Career and academic information {{career}}% completed  </p>                                                                    
+                                        
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+                        </form>
+
+                    </div>
+                </div>
+                <div class="col-md-4 text-dark ">
+                    <form id="personal-details" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="col-md-12">{{ mentor_basic.first_name|as_crispy_field }}</div>
+                        <div class="col-md-12">{{ mentor_basic.last_name|as_crispy_field }}</div>
+                        <div class="col-md-12">{{ mentor_personal.gender|as_crispy_field }}</div>
+                        <div class="col-md-12">{{ mentor_personal.place|as_crispy_field }}</div>
+                </div>
+                <div class="col-md-4 text-dark">
+                    <div class="col-md-12">{{ mentor_personal.address|as_crispy_field }}</div>
+                    <div class="col-md-12">{{ mentor_personal.contact_number|as_crispy_field }}</div>
+                    <div class="col-md-12">{{ mentor_personal.whatsappnumber|as_crispy_field }}</div>
+                    <div class="col-md-12" oninput="validateImage('profile_pic')">{{mentor_personal.profilepic|as_crispy_field }}</div>
+                </div>
+            </div>
+            <div class="mt-5 text-center mb-5">
+                <button class="btn btn-primary profile-button mb-5 " type="submit"
+                    onclick=" savedatatodatabase('#personal-details','/save/','mentor_career_info','mentor_personal_info','mentor_academic_info','career_tab','personal_tab','academic_tab')">Save
+                    Personal Info</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- end of personal info form -->
+
+        <!-- start of career info -->
+        <div class="container rounded  h-100 " id="mentor_career_info" style="display: none;">
+            <div class="row">
+                <div class="col-md-4 text-dark ">
+                    <form id="career-details" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="col-md-12">{{ mentor_career.Designation|as_crispy_field }}</div>
+                        <div class="col-md-12">{{ mentor_career.Current_working_company|as_crispy_field }}</div>
+                        <div class="col-md-12">{{ mentor_career.Working_Domain|as_crispy_field }}</div>
+
+
+                </div>
+                <div class="col-md-4 text-dark">
+                    <div class="col-md-12">{{ mentor_career.supported_any_startup|as_crispy_field }}</div>
+                    <div class="col-md-12">{{ mentor_career.experience_as_mentor|as_crispy_field }}</div>
+                    <div class="col-md-12">{{ mentor_career.contribution_to_startup_echosystem|as_crispy_field }}</div>
+
+                </div>
+                <div class="col-md-4 text-dark">
+                    <div class="col-md-12">{{ mentor_career.Presently_residing|as_crispy_field }}</div>
+                    <div class="col-md-12">{{ mentor_career.Previous_working_experience|as_crispy_field }}</div>
+                    <div class="col-md-12">{{ mentor_career.areas_of_expertise|as_crispy_field }}</div>
+
+                </div>
+            </div>
+            <div class="mt-5 text-center mb-5">
+                <button class="btn btn-primary profile-button mb-5 " type="submit"
+                    onclick=" savedatatodatabase('#career-details','/savecareer/','mentor_academic_info','mentor_personal_info','mentor_career_info','academic_tab','career_tab','personal_tab')">Save
+                    Career Info</button>
+                </form>
+            </div>
+        </div>
+        <!-- end of career info -->
+
+
+        <!-- start of academic info -->
+        <div class="container rounded  h-100 " id="mentor_academic_info" style="display: none;">
+            <div class="row">
+                <div class="col-md-3 text-dark ">
+                    <form id="academic-details" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="col-md-12" oninput="check('bachelors_degree','B_Institute','B_Subject')">{{mentor_academic.Bachelors_Degree|as_crispy_field }}</div>
+                        <div class="col-md-12">{{ mentor_academic.B_Institute|as_crispy_field }}</div>
+                        <div class="col-md-12">{{ mentor_academic.B_Subject|as_crispy_field }}</div>
+                </div>
+                <div class="col-md-3 text-dark">
+                    <div class="col-md-12" oninput="check('masters_degree','M_Institute','M_Subject')">{{mentor_academic.Masters_Degree|as_crispy_field }}</div>
+                    <div class="col-md-12">{{ mentor_academic.M_Institute|as_crispy_field }}</div>
+                    <div class="col-md-12">{{ mentor_academic.M_Subject|as_crispy_field }}</div>
+
+                </div>
+                <div class="col-md-3 text-dark">
+
+                    <div class="col-md-12" oninput="check('phd','P_Institute','P_Subject')">{{mentor_academic.PHD|as_crispy_field }}</div>
+                    <div class="col-md-12">{{ mentor_academic.P_Institute|as_crispy_field }}</div>
+                    <div class="col-md-12">{{ mentor_academic.P_Subject|as_crispy_field }}</div>
+
+                </div>
+                <div class="col-md-3 text-dark">
+
+                    <div class="col-md-12" oninput="check('post_doctorate','post_doctorate_sub','')">{{mentor_academic.post_doctorate|as_crispy_field }}</div>
+                    <div class="col-md-12">{{ mentor_academic.post_doctorate_domain|as_crispy_field }}</div>
+
+                </div>
+            </div>
+            <div class="mt-5 text-center mb-5">
+                <button class="btn btn-primary profile-button mb-5" type="submit"
+                    onclick=" savedatatodatabase('#academic-details','/saveacademic/','mentor_personal_info','mentor_academic_info','mentor_career_info','personal_tab','academic_tab','career_tab')">Save
+                    Academic Info</button>
+                </form>
+            </div>
+        </div>
+    </div><!-- end of academic info -->
+
+    <div class="container  bg-light h-100 rounded border-secondary  "
+        style=" margin-top:2%; margin-bottom:2%; display:none" id="forum_div">
+        {% for i in '0123456789'|make_list %}
+        {{ forloop.counter }}
+        <div class="container">
+            <div class="post-content">
+                <div class="user-info">
+                    <div class="row m-3">
+                        <div class="col text-dark">
+                            <img src='https://bootdey.com/img/Content/avatar/avatar6.png' alt="Profile Picture"
+                                class="img-responsive img-rounded rounded-circle m-3"
+                                style="max-height: 50px; max-width: 50px;">
+                            <h5><a href="timeline.html" class="profile-link">Alexis Clark</a></h5>
+                        </div>
+                        <div class="col text-dark text-right">
+                            <p class="text-muted">Published about 3 mins ago</p>
+                            <div class="reaction">
+                                <a class="btn text-green"><i class="fa fa-comments-o"></i> 5</a>
+                                <a class="btn text-green"><i class="fa fa-thumbs-up"></i> 13</a>
+                                <a class="btn text-red"><i class="fa fa-thumbs-down"></i> 0</a>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="title">
+                        <h4>title</h4>
+                    </div>
+                    <div class="post-text">
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
+                            labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
+                            laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in
+                            voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
+                            cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. <i
+                                class="em em-anguished"></i> <i class="em em-anguished"></i> <i
+                                class="em em-anguished"></i></p>
+                    </div>
+                    <form>
+                        <div class="row m-3">
+                            <div class="col text-dark">
+                                <input type="text" class="form-control" placeholder="Reply">
+                            </div>
+                            <div class="col text-dark">
+                                <input type="submit" value="Post" class="btn btn-primary">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        {% endfor %}
+    </div>
+    <!--end of forum div -->
+
+</div>
+<!--end of subdiv -->
+
+
+
+{% endblock %}

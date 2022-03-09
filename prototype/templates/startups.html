@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+<title>Startups</title>
+{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css"
+    integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+<div class="container mt-5">
+    <div class="row">
+        <div class="row ">
+            {% for row in startups %}
+            {% for item in company %}
+            {% if row.id == item.user_id and item.company_logo %}
+            <div class="col-lg-3 col-md-4 col-xs-6 thumb bg-light m-2">
+                <div class="row d-flex justify-content-center ">
+                    <a class="text-dark" >{{item.companyname}}</a>
+                </div>
+                <a class="thumbnail" href="https://{{ item.webpage }}" target="_blank" >
+                    <img class="img rounded" src="{{MEDIA_URL}}{{item.company_logo.url}}" alt="">
+                </a>
+                
+            </div>
+            {% endif %}
+            {% endfor %}
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

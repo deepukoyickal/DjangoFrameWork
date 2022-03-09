@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% load humanize %}
+{% load static %}
+{% block title %}
+<title>news</title>
+{% endblock %}
+{% block content%}
+<div class="container mt-3">
+    <center><h3>News AIC-IIIT Kottayam</h3></center>
+    <div class="list-group">
+        {% for item in news %}
+        <a href="/viewnews/{{item.id}}" class="list-group-item list-group-item-action flex-column align-items-start">
+            <div class="d-flex w-100 justify-content-between">
+                <h5 class="mb-1">{{item.title}}</h5>
+                <small>{{item.date | naturalday}}</small>
+            </div>
+            <p class="mb-1">{{item.content}}</p>
+        </a>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}

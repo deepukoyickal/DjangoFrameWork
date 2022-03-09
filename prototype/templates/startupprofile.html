@@ -1,0 +1,289 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block content %}
+{% if user.profile_locked == True and user.approved == False %}
+<div class="container p-5 ">
+    <div class="row text-center d-flex justify-content-center p-5 mt-5">
+        <h2>You can't modify your Profile</h2>
+        <h3>Your application for incubation is on progress</h3>
+    </div>
+</div>
+{% else %}
+<style>
+    .progress {
+        margin-bottom: 10px;
+        height: 10px;
+        font-size: 12px;
+
+    }
+
+    .progress-bar {
+        width: 0;
+
+    }
+</style>
+<div class="container-fluid display-table bg-white mt-0" style="border-top:1px solid black;">
+    <div class="container bg-white rounded mt-3" style=" margin-bottom:2%; width:auto" id="content_profile_div">
+        <div class="row">
+            <div class="col-md-6">
+                <nav class="navbar navbar-expand-lg navbar-light primary-color">
+                    <ul class="navbar-nav mr-auto">
+                        <div class="row">
+                            <li class="nav-item m-1" style=" font-family:'Courier New', Courier, monospace ;">
+                                <a class="nav-link text-dark" id="personal_tab" href="#"
+                                    onClick="show('personal_info','company_info','other_info','personal_tab','company_tab','other_tab')"
+                                    style="border-bottom: 3px solid rgb(5, 21, 243);">Personal Info</a>
+                            </li>
+                            <li class="nav-item m-1" style=" font-family:'Courier New', Courier, monospace ;">
+                                <a class="nav-link text-dark" id="company_tab" href="#"
+                                    onClick="show('company_info','personal_info','other_info','company_tab','personal_tab','other_tab')">Company
+                                    Info</a>
+                            </li>
+                            <li class="nav-item m-1" style=" font-family:'Courier New', Courier, monospace ;">
+                                <a class="nav-link text-dark" id="other_tab" href="#"
+                                    onClick="show('other_info','personal_info','company_info','other_tab','personal_tab','company_tab')">Other
+                                    Info</a>
+                            </li>
+                        </div>
+                        
+                    </ul>
+                </nav>
+                <hr style="border: 1px; border-top: 1px solid rgb(4, 1, 29);">
+            </div>
+
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <div class="container p-1 text-dark" style="font-size: 12px;">
+                            Personal information {{personal}}% completed
+                            <div class="progress">
+                                <div class="progress-bar bg-success" role="progressbar"
+                                    aria-valuenow="{{personal}}" aria-valuemin="0" aria-valuemax="100">
+                                    {{personal}}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 text-center">
+                        <div class="container p-1 text-dark" style="font-size: 12px;">
+                            Company information {{comapny_percentage}}% completed
+                            <div class="progress">
+                                <div class="progress-bar bg-info" role="progressbar"
+                                    aria-valuenow="{{comapny_percentage}}" aria-valuemin="0"
+                                    aria-valuemax="100">{{comapny_percentage}}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 text-center">
+                        {% if user.approved == True and company_info.applied_for_incubation == True %}
+                        <p class="text-success">Approved as {{user.type}}</p>
+                        {% elif company_info.applied_for_incubation == True and user.approved == False %}
+                        <p class="text-primary">Your application for incubation is under processing</p>
+                        {% elif company_info.applied_for_incubation == False and comapny_percentage >= 55 and personal >= 100 %}
+                        <p class="text-danger">You are not applied for incubation</p>
+                        <form id="apply_incubation" method="post" action="/apply_incubation/" >
+                            {% csrf_token %}
+                            <button class="btn-success border border-none" onclick="updateDataBase()" type="submit">apply now</button>
+                        </form>
+                        {% else %}
+                        <p class="text-primary">Complete your profile to apply for incubation</p>
+                        {% endif %}
+                    </div>
+                </div>                
+            </div>
+
+
+
+            <!-- start of personal info form -->
+            <div class="container rounded bg-light" id="personal_info">
+                <h5 class="text-center m-4 text-dark">Founder Personal Information</h5>
+                <div class="row">
+                    <div class="col-md-4 p-3">
+                        <div class="row d-flex flex-column align-items-center text-center">
+                            <div id="profile_pic_div">
+                                {% if not user_info.profilepic %}
+                                    <img class="rounded-circle" src="{% static 'images/profile.png' %}" width="90"
+                                        height="90" onclick="showprofilepicuploadarea('profile_pic_upload_area');"><br>
+                                {% else %}
+                                    <img class="rounded-circle" src="{{MEDIA_URL}}{{user_info.profilepic.url}}"
+                                        width="90" height="90"
+                                        onclick="showprofilepicuploadarea('profile_pic_upload_area');"><br>
+                                {% endif %}           
+                            </div>
+                        </div>
+                        <div class="row text-center d-flex justify-content-center">
+                            <div class="col-md-12">
+                                <table class="table mt-3 text-dark  table-borderless">
+                                    <tbody class="text-left">
+                                        <tr >
+                                            <td>Company</td><td>: {{company_info.companyname}}</td>                                            
+                                        </tr>
+                                        <tr >
+                                            <td>Founder</td><td>: {{company_info.founder}}</td>                                            
+                                        </tr>
+                                        <tr>
+                                            <td>Address</td><td>: {{company_info.company_address}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Type of incubation</td><td>: {{company_info.type_of_incubation}}</td>
+                                        </tr>
+                                        {% if user.approved == True %}
+                                        <tr>
+                                            <td>Date of incubation</td>
+                                            <td>
+                                                : {{company_info.date_of_incubation}}                                                 
+                                            </td>
+                                        </tr>
+                                        {% else %}
+                                        <tr>
+                                            <td>Date of incubation</td><td>: Application Pending</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Applied for incubation</td><td>: {{company_info.applied_for_incubation}}</td>
+                                        </tr>
+                                        {% endif %}
+                                    </tbody>
+                                </table>          
+                            </div>      
+                        </div>                     
+                        
+                    </div>
+                    <div class="col-md-4 text-dark ">
+                        <form id="personal-details" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div id="profie_data_div1">
+                                <div class="col-md-12">
+                                    <label>First Name*</label>
+                                    <input type="text" readonly class="form-control" value="{{user.first_name}}" required>
+                                </div>
+                                <div class="col-md-12">
+                                    <label>Last Name*</label>
+                                    <input type="text" readonly class="form-control" value="{{user.last_name}}" required>
+                                </div>
+                                    <div class="col-md-12">{{ form1.gender|as_crispy_field }}</div>
+                                    <div class="col-md-12">{{ form1.place|as_crispy_field }}</div>                             
+                            </div>
+                    </div>
+                    <div class="col-md-4 text-dark">
+                        <div id="profile_data_div2">                            
+                                <div class="col-md-12">{{ form1.address|as_crispy_field }}</div>
+                                <div class="col-md-12">{{ form1.contact_number|as_crispy_field }}</div>
+                                <div class="col-md-12">{{ form1.whatsappnumber|as_crispy_field }}</div>
+                                <div class="col-md-12" oninput="validateImage('profile_pic')">{{form1.profilepic|as_crispy_field }}</div>                          
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-5 text-center mb-5">
+                    <button class="btn btn-primary profile-button mb-5" type="submit"
+                        onclick=" savedatatodatabase('#personal-details','/save/','company_info','personal_info','other_info','company_tab','personal_tab','other_tab')">Save
+                        Personal Info</button>
+                    </form>
+                </div>
+            </div>
+            <!-- end of personal info form -->
+
+            <!-- company info form -->
+            <div class="container rounded  bg-light " id="company_info" style="display: none;">
+                <form enctype="multipart/form-data" id="company_info_form">
+                    {% csrf_token %}
+                        <div class="row">
+                            <div class="col-md-4 text-dark">                           
+                                <div class="col-md-12">{{ form3.companyname|as_crispy_field }}</div>
+                                <div class="col-md-12">{{ form3.year_of_registration|as_crispy_field }}</div>
+                                <div class="col-md-12">{{ form3.cin_number|as_crispy_field }}</div>
+                                <div class="col-md-12">{{ form3.dipp_number|as_crispy_field }}</div>
+                                <div class="col-md-12">{{ form3.founder|as_crispy_field }}</div>
+                                <div class="col-md-12">{{ form3.num_directors|as_crispy_field }}</div>
+                                <div class="col-md-12">{{ form3.num_women_dir|as_crispy_field }}</div>
+                                <div class="col-md-12">{{ form3.employees|as_crispy_field }}</div>
+                                <div class="col-md-12">{{ form3.type_of_incubation|as_crispy_field }}</div>                        
+                            </div>
+                            <div class="col-md-4 text-dark ">
+                                <div class="col-md-12">{{ form3.webpage|as_crispy_field }}</div>
+                                <div class="col-md-12"
+                                    oninput="displayField('intelectual_property','i_property_type','i_property_num')">{{form3.intelectual_property|as_crispy_field }}</div>
+                                <div class="col-md-12" id="i_property_type" style="display: none;">{{form3.i_property_type|as_crispy_field }}</div>
+                                <div class="col-md-12" id="i_property_num" style="display: none;">{{form3.number_of_ip|as_crispy_field }}</div>
+                                <div class="col-md-12">{{ form3.funding|as_crispy_field }}</div>
+                                <div class="col-md-12">{{ form3.company_address|as_crispy_field }}</div>
+                                <div class="col-md-12">{{ form3.sector|as_crispy_field }}</div>
+                                <div class="col-md-12">{{ form3.operational_model|as_crispy_field }}</div>
+                                <div class="col-md-12">{{ form3.target_market|as_crispy_field }}</div>
+                            </div>
+                            <div class="col-md-4 text-dark ">
+                                <div class="col-md-12">{{ form3.about|as_crispy_field }}</div>
+                                <div class="col-md-12">{{ form3.msme_registration|as_crispy_field }}</div>
+                                <div class="col-md-12">{{ form3.flagship_program|as_crispy_field }}</div>
+                                <div class="col-md-12">{{ form3.stage|as_crispy_field }}</div>
+                                <div class="col-md-12">{{ form3.nature_of_firm|as_crispy_field }}</div>
+                                <div class="col-md-12" oninput="validateFile('startup_pitch');">{{form3.startup_pitch|as_crispy_field }}</div>
+                                <div class="col-md-12" oninput="validateImage('company_logo')">{{form3.company_logo|as_crispy_field }}</div>
+                            </div>
+                    </div>
+                    <div class="mt-5 text-center mb-5">
+                        <button class="btn btn-primary profile-button mb-5" type="submit"
+                            onClick="savedatatodatabase('#company_info_form','/savecompany/','other_info','company_info','personal_info','other_tab','personal_tab','company_tab')">Save
+                            Company Info</button>
+                    </div>
+                </form>
+            </div>
+            <!-- end of company info form -->
+
+            <!-- start of other info form -->
+            <div class="container rounded  bg-light " id="other_info" style="display: none;">
+                <form enctype="multipart/form-data" id="other_info_form">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-sm text-dark">
+                            <div class="col-md-12">{{ form4.academic_qualification_founder|as_crispy_field }}</div>
+                            <div class="col-md-12">{{ form4.expectation|as_crispy_field }}</div>
+                        </div>
+                        <div class="col-sm text-dark ">
+                            <div class="col-md-12">{{ form4.field_of_study|as_crispy_field }}</div>
+                            <div class="col-md-12">{{ form4.experience_of_founder|as_crispy_field }}</div>
+                        </div>
+                        <div class="col-md-4 text-dark ">
+                            <div class="col-md-12">{{ form4.core_competancy|as_crispy_field }}</div>
+                            <div class="col-md-12">{{ form4.other_info|as_crispy_field }}</div>
+                        </div>
+                    </div>
+                    <div class="mt-5 text-center mb-5">
+                        <button class="btn btn-primary profile-button mb-5" type="submit"
+                            onClick="savedatatodatabase('#other_info_form','/saveotherinfo/','personal_info','other_info','company_info','personal_tab','other_tab','company_tab')">Save
+                            Profile</button>
+                    </div>
+                </form>
+            </div>
+            <!-- end of other info form -->
+        </div> <!-- end of page content -->
+    </div>
+</div>
+
+<script>
+    function displayField(parent, child1, child2) {
+        if (document.getElementById(parent).value == 'True') {
+            $("#" + child1).show();
+            $("#" + child2).show();
+        }
+
+        else {
+            $("#" + child1).hide();
+            $("#" + child2).hide();
+        }
+
+
+    }
+    function updateDataBase()
+    {
+        
+        let confirmation = "Are you sure\nEither OK or Cancel.";
+        if (confirm(confirmation) == true) 
+            return true;
+        else
+            return false;
+
+    }
+    
+</script>
+{% endif %}
+{% endblock %}

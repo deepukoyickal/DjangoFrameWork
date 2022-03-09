@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block title %}
+<title>view_edit_job</title>
+{% endblock %}
+
+{% block content %}
+<div class="container border mb-5 mt-5 p-5">
+    <form method="post" action="/viewJob/{{job.id}}" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-md-12">
+                {{form.job_title|as_crispy_field}}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                {{form.job_description|as_crispy_field}}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                {{form.job_qualification|as_crispy_field}}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12" oninput="validateFile('job_pdf')">
+                {{form.job_pdf|as_crispy_field}}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                {{form.date|as_crispy_field}}
+            </div>
+        </div>  
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <button class="btn btn-primary" type="submit">Update</button>
+            </div>            
+        </div>        
+    </form>
+    
+</div>
+
+{% endblock %}

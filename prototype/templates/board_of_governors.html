@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<style>    
+    .item_block {
+        background-color: white;
+        text-align: center;
+        border-radius: 20px;
+        color:black;
+        margin-bottom: 50px;
+    }
+    
+    .title {
+        font-size: 25px;
+        font-weight: 100
+    }
+    
+    .icon {
+        position: relative;
+        bottom: 11px
+    }
+    
+    .mt-100 {
+        margin-top: 100px
+    }
+    
+    .profile img {
+        width: 88px;
+        height: 88px;
+        border-radius: 50%
+    }
+    
+    .card {
+        border-radius: 15px;
+        height: 200px;
+        margin-left: 30px;
+        margin-right: 30px;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, .2)
+    }
+    
+    .card-body {
+        position: relative;
+        bottom: 35px
+    }
+    
+    .btn {
+        margin-top: 36px;
+        margin-bottom: 45px;
+        background-color: #AB47BC;
+        border: none;
+        color: #fff
+    }
+    
+    .btn:hover {
+        -webkit-transform: scale(1.05);
+        -ms-transform: scale(1.05);
+        transform: scale(1.05);
+        color: #fff
+    }
+    
+    .header {
+        padding-top: 40px
+    }
+</style>
+
+<div class='container item_block mx-auto mt-5 col-md-10 mt-100'>
+    <div class="header">
+        <div class="title text-dark"><h3>AIC-IIITKottayam Board of Governors</h3></div>
+    </div>
+    
+    <div class="row justify-content-center pb-5">
+        {% for member in board %}
+        <div class="card col-md-3 mt-100">
+            <div class="card-content">
+                <div class="card-body p-0">
+                    {% if member.path %}
+                    <div class="profile"> <img src="{{MEDIA_URL}}{{member.path.url}}"> </div>
+                    {% else %}
+                    <div class="profile"> <img src="{% static 'images/profile.png' %}"> </div>                    
+                    {% endif %}
+                    <div class="card-title mt-4">{{member.name}}<br /> <small>{{member.designation1}}</small><br><small>{{member.designation2}}</small></div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+        
+    </div>
+</div>    
+{% endblock %}                        
